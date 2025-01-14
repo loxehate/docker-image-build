@@ -71,18 +71,16 @@ jobs:
             image=$(echo "$line" | awk '{print $NF}')
             pwd
             chmod +x ./docker/*.sh
-            # sudo docker build -t $ALIYUN_REGISTRY/$ALIYUN_NAME_SPACE/$image .
-            sudo docker build -t registry.cn-hangzhou.aliyuncs.com/imagehubs/$image .
-            echo "docker push $image"
+            sudo docker build -t $ALIYUN_REGISTRY/$ALIYUN_NAME_SPACE/$image .
+            echo "docker push $ALIYUN_REGISTRY/$ALIYUN_NAME_SPACE/$image"
             docker images
             sudo docker login -u $ALIYUN_REGISTRY_USER -p $ALIYUN_REGISTRY_PASSWORD $ALIYUN_REGISTRY
-            # docker push $ALIYUN_REGISTRY/$ALIYUN_NAME_SPACE/$image
-            docker push registry.cn-hangzhou.aliyuncs.com/imagehubs/$image
+            docker push $ALIYUN_REGISTRY/$ALIYUN_NAME_SPACE/$image
             echo "开始清理磁盘空间"
             echo "=============================================================================="
             df -hT
             echo "=============================================================================="
-            docker rmi $image
+            docker rmi $ALIYUN_REGISTRY/$ALIYUN_NAME_SPACE/$image
             echo "磁盘空间清理完毕"
             echo "=============================================================================="
             df -hT
