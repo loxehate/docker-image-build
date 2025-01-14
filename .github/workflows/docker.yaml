@@ -68,6 +68,7 @@ jobs:
             cd superset-4.0.0
             image=$(echo "$line" | awk '{print $NF}')
             pwd
+            free -h
             docker build -t $ALIYUN_REGISTRY/$ALIYUN_NAME_SPACE/$image .
             docker push $ALIYUN_REGISTRY/$ALIYUN_NAME_SPACE/$image
             echo "docker push $image"
