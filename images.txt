@@ -1,3 +1,2 @@
-#superset:4.0
-redis
+superset:4.0
 
