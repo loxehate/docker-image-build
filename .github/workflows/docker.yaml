@@ -64,6 +64,7 @@ jobs:
             if echo "$line" | grep -q '^\s*#'; then
                 continue
             fi
+            docker info
             docker login -u $ALIYUN_REGISTRY_USER -p $ALIYUN_REGISTRY_PASSWORD $ALIYUN_REGISTRY
             cd superset-4.0.0
             image=$(echo "$line" | awk '{print $NF}')
