@@ -1,2 +1,2 @@
-superset:4.0.0-python3.9-ubuntu20.04
+superset:4.0
 

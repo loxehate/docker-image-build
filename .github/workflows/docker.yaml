@@ -67,15 +67,17 @@ jobs:
                 continue
             fi
             echo "开始构建镜像"
-            sudo docker login -u $ALIYUN_REGISTRY_USER -p $ALIYUN_REGISTRY_PASSWORD $ALIYUN_REGISTRY
             cd build
             image=$(echo "$line" | awk '{print $NF}')
             pwd
             chmod +x ./docker/*.sh
-            sudo docker build -t $ALIYUN_REGISTRY/$ALIYUN_NAME_SPACE/$image .
+            # sudo docker build -t $ALIYUN_REGISTRY/$ALIYUN_NAME_SPACE/$image .
+            sudo docker build -t registry.cn-hangzhou.aliyuncs.com/imagehubs/$image .
             echo "docker push $image"
             docker images
-            docker push $ALIYUN_REGISTRY/$ALIYUN_NAME_SPACE/$image
+            sudo docker login -u $ALIYUN_REGISTRY_USER -p $ALIYUN_REGISTRY_PASSWORD $ALIYUN_REGISTRY
+            # docker push $ALIYUN_REGISTRY/$ALIYUN_NAME_SPACE/$image
+            docker push registry.cn-hangzhou.aliyuncs.com/imagehubs/$image
             echo "开始清理磁盘空间"
             echo "=============================================================================="
             df -hT
