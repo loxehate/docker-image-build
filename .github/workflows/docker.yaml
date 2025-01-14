@@ -68,7 +68,7 @@ jobs:
             fi
             echo "开始构建镜像"
             sudo docker login -u $ALIYUN_REGISTRY_USER -p $ALIYUN_REGISTRY_PASSWORD $ALIYUN_REGISTRY
-            cd superset-4.0.0
+            cd build
             image=$(echo "$line" | awk '{print $NF}')
             pwd
             chmod +x ./docker/*.sh
@@ -81,7 +81,6 @@ jobs:
             df -hT
             echo "=============================================================================="
             docker rmi $image
-            docker rmi $new_image
             echo "磁盘空间清理完毕"
             echo "=============================================================================="
             df -hT
