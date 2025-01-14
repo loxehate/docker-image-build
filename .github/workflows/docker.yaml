@@ -73,9 +73,9 @@ jobs:
             pwd
             chmod +x ./docker/*.sh
             sudo docker build -t $ALIYUN_REGISTRY/$ALIYUN_NAME_SPACE/$image .
-            docker push $ALIYUN_REGISTRY/$ALIYUN_NAME_SPACE/$image
             echo "docker push $image"
-            docker push $image
+            docker images
+            docker push $ALIYUN_REGISTRY/$ALIYUN_NAME_SPACE/$image
             echo "开始清理磁盘空间"
             echo "=============================================================================="
             df -hT
