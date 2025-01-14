@@ -110,7 +110,7 @@ jobs:
             echo "docker build $line"
             cd build
             chmod +x ./docker/*.sh
-            docker build -t $image .
+            docker build -f Dockerfile -t $image .
             platform=$(echo "$line" | awk -F'--platform[ =]' '{if (NF>1) print $2}' | awk '{print $1}')
             echo "platform is $platform"
             # 获取镜像的完整名称，例如kasmweb/nginx:1.25.3（命名空间/镜像名:版本号）
