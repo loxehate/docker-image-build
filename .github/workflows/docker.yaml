@@ -67,6 +67,7 @@ jobs:
             docker login -u $ALIYUN_REGISTRY_USER -p $ALIYUN_REGISTRY_PASSWORD $ALIYUN_REGISTRY
             cd superset-4.0.0
             image=$(echo "$line" | awk '{print $NF}')
+            pwd
             docker build -t $ALIYUN_REGISTRY/$ALIYUN_NAME_SPACE/$image .
             docker push $ALIYUN_REGISTRY/$ALIYUN_NAME_SPACE/$image
             echo "docker push $image"
