@@ -36,6 +36,8 @@ ENV BUILD_CMD=${NPM_BUILD_CMD} \
 # NPM ci first, as to NOT invalidate previous steps except for when package.json changes
 WORKDIR /app/superset-frontend
 
+RUN chmod +x ./docker/*.sh
+
 RUN --mount=type=bind,target=/frontend-mem-nag.sh,src=./docker/frontend-mem-nag.sh \
     /frontend-mem-nag.sh
 
