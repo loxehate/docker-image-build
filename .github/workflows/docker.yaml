@@ -67,7 +67,7 @@ jobs:
       with:
         username: $ALIYUN_REGISTRY_USER
         password: $ALIYUN_REGISTRY_PASSWORD
-        registry: $ALIYUN_REGISTRY
+        registry: registry.cn-hangzhou.aliyuncs.com
 
     - name: Build and push Docker image
       uses: docker/build-push-action@v6
