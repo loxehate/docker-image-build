@@ -7,7 +7,7 @@ RUN apk update && apk add --no-cache python3 py3-pip bash openssh-client openssh
 RUN pip install ansible-core==2.17.7 jmespath
 
 #安装ansible插件
-RUN ansible-galaxy collection install community-general
+RUN ansible-galaxy collection install community.general
 
 # 复制ansible配置文件
 COPY ./ansible /etc/
