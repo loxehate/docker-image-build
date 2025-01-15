@@ -1,9 +1,10 @@
-# Docker Images Pusher
+# Docker Images Build
 
-使用Github Action将国外的Docker镜像转存到阿里云私有仓库，供国内服务器使用，免费易用<br>
+使用Github Action构建Docker镜像转存到阿里云私有仓库，供国内服务器使用，免费易用<br>
 - 支持DockerHub, gcr.io, k8s.io, ghcr.io等任意仓库<br>
 - 支持最大40GB的大型镜像<br>
 - 使用阿里云的官方线路，速度快<br>
+- 支持多架构构建，默认构建arm64、amd64,其他架构调整.github/docker.yaml<br>
 
 ## 使用方式
 
@@ -34,11 +35,12 @@ ALIYUN_NAME_SPACE,ALIYUN_REGISTRY_USER，ALIYUN_REGISTRY_PASSWORD，ALIYUN_REGIS
 配置成环境变量
 
 ### 添加dockerfile
-将dockerfile和配置文件添加至build文件夹中，确保构建文件权限正确
+将dockerfile和配置文件添加至build文件夹中，确保构建文件权限正确（dockerfile无需构建国内镜像源）
 
 ### 添加镜像
 打开images.txt文件，添加构建的镜像名称和版本 
-![](doc/images.png)
+![](doc\images.png)
+
 文件提交后，自动进入Github Action构建
 
 ### 使用镜像
@@ -47,7 +49,7 @@ ALIYUN_NAME_SPACE,ALIYUN_REGISTRY_USER，ALIYUN_REGISTRY_PASSWORD，ALIYUN_REGIS
 
 在国内服务器pull镜像, 例如：<br>
 ```
-docker pull registry.cn-hangzhou.aliyuncs.com/imagehubs/ubuntu
+docker pull --platform linux/arm64 registry.cn-hangzhou.aliyuncs.com/imagehubs/ubuntu
 ```
 registry.cn-hangzhou.aliyuncs.com 即 ALIYUN_REGISTRY(阿里云仓库地址)<br>
 shrimp-images 即 ALIYUN_NAME_SPACE(阿里云命名空间)<br>

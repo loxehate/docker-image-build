@@ -1,10 +1,13 @@
 FROM alpine:3.18.11
 
+#定义变量
+ARG ANSIBLE_VAR=2.16.14
+
 # 更新包索引并安装 Python 和 pip
 RUN apk update && apk add --no-cache python3 py3-pip bash openssh-client openssh-keygen 
 
 # 安装 Ansible
-RUN pip install ansible-core==2.18.1 jmespath
+RUN pip install ansible-core==${ANSIBLE_VAR} jmespath
 
 #安装ansible插件
 RUN ansible-galaxy collection install community.general
