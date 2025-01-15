@@ -1,9 +1,0 @@
-# Here's another example of host ranges, this time there are no
-# leading 0s:
-
-## db-[99:101]-node.example.com
-[all]
-192.168.10.11
-192.168.10.12
-192.168.10.13
-
