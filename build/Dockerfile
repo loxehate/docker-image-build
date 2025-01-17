@@ -174,7 +174,7 @@ USER superset
 ######################################################################
 FROM lean AS ci
 
-COPY --chown=superset ./docker/.env /app/docker/
+COPY --chown=superset ./docker/.env-non-dev /app/docker/
 COPY --chown=superset ./docker/pythonpath_dev/superset_config.py /app/docker/pythonpath_dev/
 COPY --chown=superset:superset --chmod=755 ./docker/*.sh /app/docker/
 
