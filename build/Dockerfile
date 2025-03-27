@@ -5,6 +5,7 @@ WORKDIR /app
 COPY . .
 
 # 安装依赖和 PyInstaller
+RUN apt-get update && apt-get install -y gcc build-essential
 RUN pip install --upgrade pip && pip install pyinstaller && pip install -r requirements.txt
 RUN pyinstaller --onefile --debug app.py
 
