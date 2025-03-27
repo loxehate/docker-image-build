@@ -5,7 +5,7 @@ WORKDIR /app
 COPY . .
 
 # 安装依赖和 PyInstaller
-RUN pip install --upgrade pip && pip install -r requirements.txt
+RUN pip install --upgrade pip && pip install pyinstaller && pip install -r requirements.txt
 RUN pyinstaller --onefile app.py
 
 # 第二阶段：极简 scratch 镜像，只包含可执行文件
