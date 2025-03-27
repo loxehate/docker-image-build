@@ -1,23 +1,9 @@
-FROM alpine:3.18.11
+# syntax=docker/dockerfile:1
 
-#定义变量
-ARG ANSIBLE_VAR=2.18.3
-
-# 更新包索引并安装 Python 和 pip
-RUN apk update && apk add --no-cache python3 py3-pip bash openssh-client openssh-keygen 
-
-# 安装 Ansible
-RUN pip install ansible-core==${ANSIBLE_VAR} jmespath
-
-#安装ansible插件
-RUN ansible-galaxy collection install community.general
-
-# 复制ansible配置文件
-COPY ./ansible /etc/
-
-# 设置工作目录
-WORKDIR /etc/ansible
-
-# 运行 Ansible 命令
-CMD ["tail","-f","/dev/null"]
-
+FROM python:3.8-slim-buster
+RUN apt-get update && apt-get install -y procps vim apache2-utils && rm -rf /var/lib/apt/lists/*
+WORKDIR /app
+COPY requirements.txt requirements.txt
+RUN pip3 install -r requirements.txt
+COPY . .
+CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0"]
