@@ -1,1 +1,1 @@
-hello-api-flask:latest
+ansible-core:2.14.1
