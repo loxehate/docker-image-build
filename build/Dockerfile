@@ -1,7 +1,7 @@
 FROM alpine:3.18.11
 
 #定义变量
-ARG ANSIBLE_VAR=2.14.1
+ARG ANSIBLE_VAR=2.15.2
 
 # 更新包索引并安装 Python 和 pip
 RUN apk update && apk add --no-cache python3 py3-pip bash openssh-client openssh-keygen 
