@@ -7,7 +7,7 @@ ARG ANSIBLE_VAR=2.18.4
 RUN apk update && apk add --no-cache python3 py3-pip bash openssh-client openssh-keygen 
 
 # 安装 Ansible
-RUN pip install ansible-core==${ANSIBLE_VAR} jmespath
+RUN pip install ansible-core==${ANSIBLE_VAR} jmespath mitogen
 
 #安装ansible插件
 RUN ansible-galaxy collection install community.general
