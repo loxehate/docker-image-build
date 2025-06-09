@@ -13,7 +13,7 @@ RUN pip install ansible-core==${ANSIBLE_VAR} jmespath mitogen
 RUN ansible-galaxy collection install community.general
 
 # 复制ansible配置文件
-COPY ./ansible/ /etc/
+COPY ./ansible /etc/
 
 # 配置mitogen插件
 RUN ls -l /etc
