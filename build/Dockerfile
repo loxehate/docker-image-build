@@ -16,8 +16,9 @@ RUN ansible-galaxy collection install community.general
 COPY ./ansible /etc/
 
 # 配置mitogen插件
-RUN sed -i "s|^#strategy_plugins *=.*|strategy_plugins = $(pip show mitogen | grep Location | awk -F: '{print $2}' | sed 's| *$||')/ansible_mitogen/plugins/strategy|" /etc/ansible/ansible.cfg
-RUN sed -i "s|^#strategy *=.*|strategy = mitogen_linear|" /etc/ansible/ansible.cfg
+RUN cat /etc/ansible/ansible.cfg | grep strategy_plugins
+# RUN sed -i "s|^#strategy_plugins *=.*|strategy_plugins = $(pip show mitogen | grep Location | awk -F: '{print $2}' | sed 's| *$||')/ansible_mitogen/plugins/strategy|" /etc/ansible/ansible.cfg
+# RUN sed -i "s|^#strategy *=.*|strategy = mitogen_linear|" /etc/ansible/ansible.cfg
 
 # 设置工作目录
 WORKDIR /etc/ansible
