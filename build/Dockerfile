@@ -15,13 +15,15 @@ RUN ansible-galaxy collection install community.general
 # 复制ansible配置文件
 COPY ./ansible/ /etc/ansible/
 
-# 配置mitogen插件
-RUN sed -i "s|^#strategy_plugins *=.*|strategy_plugins = $(pip show mitogen | grep Location | awk -F: '{print $2}' | sed 's| *$||')/ansible_mitogen/plugins/strategy|" /etc/ansible/ansible.cfg
-RUN sed -i "s|^#strategy *=.*|strategy = mitogen_linear|" /etc/ansible/ansible.cfg
+# 复制并设置入口脚本
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
 
 # 设置工作目录
 WORKDIR /etc/ansible
 
+# 设置入口脚本并保持容器运行
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 # 运行 Ansible 命令
 CMD ["tail","-f","/dev/null"]
 
