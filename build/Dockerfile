@@ -12,11 +12,12 @@ RUN pip install ansible-core==${ANSIBLE_VAR} jmespath mitogen
 #安装ansible插件
 RUN ansible-galaxy collection install community.general
 
-# 配置mitogen插件
-RUN sed -i "s|^#strategy_plugins *=.*|strategy_plugins = $(pip show mitogen | grep Location | awk -F: '{print $2}' | sed 's| *$||')/ansible_mitogen/plugins/strategy|" ./ansible/ansible.cfg
-RUN sed -i "s|^#strategy *=.*|strategy = mitogen_linear|" ./ansible/ansible.cfg
 # 复制ansible配置文件
 COPY ./ansible /etc/
+
+# 配置mitogen插件
+RUN sed -i "s|^#strategy_plugins *=.*|strategy_plugins = $(pip show mitogen | grep Location | awk -F: '{print $2}' | sed 's| *$||')/ansible_mitogen/plugins/strategy|" /etc/ansible/ansible.cfg
+RUN sed -i "s|^#strategy *=.*|strategy = mitogen_linear|" /etc/ansible/ansible.cfg
 
 # 设置工作目录
 WORKDIR /etc/ansible
