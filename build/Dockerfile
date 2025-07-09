@@ -1,22 +1,29 @@
-FROM python:3.6-slim
+FROM alpine:3.18.11
 
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-        build-essential \
-        python3-dev \
-        libffi-dev \
-        libxml2-dev \
-        libxslt-dev \
-        gcc && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+#定义变量
+ARG ANSIBLE_VAR=2.18.4
 
-WORKDIR /opt/
+# 更新包索引并安装 Python 和 pip
+RUN apk update && apk add --no-cache python3 py3-pip bash openssh-client openssh-keygen 
 
-COPY . .
+# 安装 Ansible
+RUN pip install ansible-core==${ANSIBLE_VAR} jmespath mitogen
 
-RUN pip install --no-cache-dir -r ./requirements.txt
-	
-EXPOSE 5100
+#安装ansible插件
+RUN ansible-galaxy collection install community.general
 
-CMD gunicorn app:app -c gunicorn.conf.py
+# 复制ansible配置文件
+COPY ./ansible/ /etc/ansible/
+
+# 复制并设置入口脚本
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
+# 设置工作目录
+WORKDIR /etc/ansible
+
+# 设置入口脚本并保持容器运行
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+# 运行 Ansible 命令
+CMD ["tail","-f","/dev/null"]
+

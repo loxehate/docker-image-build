@@ -1,1 +1,1 @@
-yd:latest
+ansible-core:2.18.4
