@@ -1,12 +1,12 @@
 FROM alpine:3.18.11
 
 #定义变量
-ARG ANSIBLE_VAR=2.18.8
+ARG ANSIBLE_VAR=2.18.4
 
 # 更新包索引并安装 Python 和 pip
 # 安装 Ansible
 #安装ansible插件
-RUN apk update && apk add --no-cache python3 py3-pip bash openssh-client openssh-keygen && pip install ansible-core==${ANSIBLE_VAR} jmespath mitogen && ansible-galaxy collection install community.general 
+RUN apk update && apk add --no-cache python3 py3-pip bash openssh-client openssh-keygen && pip install ansible-core==${ANSIBLE_VAR} jmespath mitogen && ansible-galaxy collection install community.general
 
 # 复制ansible配置文件
 COPY ./ansible/ /etc/ansible/
