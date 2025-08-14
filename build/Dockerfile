@@ -1,7 +1,7 @@
 FROM alpine:3.18.11
 
 #定义变量
-ARG ANSIBLE_VAR=2.18.4
+ARG ANSIBLE_VAR=2.18.8
 
 # 更新包索引并安装 Python 和 pip
 # 安装 Ansible
