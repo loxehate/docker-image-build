@@ -1,6 +1,6 @@
 # ===== builder 阶段 =====
 FROM alpine:3.18.11 AS builder
-ARG ANSIBLE_VAR=2.18.8
+ARG ANSIBLE_VAR=2.18.4
 
 RUN apk add --no-cache \
         python3 \
@@ -19,14 +19,18 @@ RUN apk add --no-cache \
 
 # ===== final 阶段 =====
 FROM alpine:3.18.11
-COPY --from=builder /usr/lib/python3.*/site-packages /usr/lib/python3.*/site-packages
+
+# 安装运行所需的最小依赖
+RUN apk add --no-cache python3 bash openssh-client openssh-keygen
+
+# 从 builder 拷贝 Python 和 Ansible 所有运行文件
+COPY --from=builder /usr/lib/python3.*/site-packages /usr/lib/python3.11/site-packages
 COPY --from=builder /usr/bin/ansible* /usr/bin/
 COPY --from=builder /usr/bin/python3 /usr/bin/
 COPY --from=builder /usr/bin/pip3 /usr/bin/
 COPY --from=builder /usr/lib/libpython3* /usr/lib/
 
-RUN apk add --no-cache python3 bash openssh-client openssh-keygen
-
+# 复制 ansible 配置
 COPY ./ansible/ /etc/ansible/
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
