@@ -1,25 +1,10 @@
-FROM alpine:3.18.11
-
-#定义变量
-ARG ANSIBLE_VAR=2.18.8
-
-# 更新包索引并安装 Python 和 pip
-# 安装 Ansible
-#安装ansible插件
-RUN apk update && apk add --no-cache python3 py3-pip bash openssh-client openssh-keygen && pip install ansible-core==${ANSIBLE_VAR} jmespath mitogen && ansible-galaxy collection install community.general
-
-# 复制ansible配置文件
-COPY ./ansible/ /etc/ansible/
-
-# 复制并设置入口脚本
-COPY entrypoint.sh /usr/local/bin/entrypoint.sh
-RUN chmod +x /usr/local/bin/entrypoint.sh
-
-# 设置工作目录
-WORKDIR /etc/ansible
-
-# 设置入口脚本并保持容器运行
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
-# 运行 Ansible 命令
-CMD ["tail","-f","/dev/null"]
-
+FROM fluentd:v1.19.0-debian-1.0
+USER root
+ADD GeoLite2-City.mmdb /fluentd/GeoLite2-City.mmdb
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends build-essential libgeoip-dev autoconf automake libtool libffi-dev \
+    && fluent-gem install fluent-plugin-elasticsearch fluent-plugin-geoip fluent-plugin-rewrite-tag-filter \
+    && apt-get autoclean \
+    && gem sources --clear-all \
+    && rm -rf /var/lib/apt/lists/* \
+    && rm -rf /tmp/* /var/tmp/* /usr/lib/ruby/gems/*/cache/*.gem

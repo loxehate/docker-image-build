@@ -1,1 +1,1 @@
-ansible-core:2.18.8
+fluentd:v1.19.0
