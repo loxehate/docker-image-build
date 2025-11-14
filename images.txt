@@ -1,1 +1,1 @@
-fluentd:v1.19.0
+filebeat-wolfi-systemd:8.17.2
