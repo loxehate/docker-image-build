@@ -1,1 +1,1 @@
-filebeat-wolfi-systemd:8.17.2
+filebeat-systemd:8.17.2
