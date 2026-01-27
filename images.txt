@@ -1,1 +1,1 @@
-ansible-console:v1.0.0
+ansible-console:latest
