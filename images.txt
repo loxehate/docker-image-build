@@ -1,1 +1,1 @@
-filebeat-systemd:8.17.2
+ansible-console:v1.0.0
