@@ -1,1 +1,1 @@
-ansible-console:latest
+infiniflow/ragflow:nightly

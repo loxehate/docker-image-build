@@ -1,0 +1,2569 @@
+2026-03-18 11:16:11,585 INFO     27 task_executor_12a3575b0bdb_0 log path: /ragflow/logs/task_executor_12a3575b0bdb_0.log, log levels: {'peewee': 'WARNING', 'pdfminer': 'WARNING', 'root': 'INFO'}
+2026-03-18 11:16:11,585 INFO     27 Staggering startup by 0.36s to prevent connection storm
+2026-03-18 11:16:11,944 INFO     27 
+    ____                      __  _
+   /  _/___  ____ ____  _____/ /_(_)___  ____     ________  ______   _____  _____
+   / // __ \/ __ `/ _ \/ ___/ __/ / __ \/ __ \   / ___/ _ \/ ___/ | / / _ \/ ___/
+ _/ // / / / /_/ /  __(__  ) /_/ / /_/ / / / /  (__  )  __/ /   | |/ /  __/ /
+/___/_/ /_/\__, /\___/____/\__/_/\____/_/ /_/  /____/\___/_/    |___/\___/_/
+          /____/
+    
+2026-03-18 11:16:11,945 INFO     27 RAGFlow version: v0.24.0
+2026-03-18 11:16:11,946 INFO     27 Current configs, from /ragflow/conf/service_conf.yaml:
+	ragflow: {'host': '0.0.0.0', 'http_port': 9380}
+	admin: {'host': '0.0.0.0', 'http_port': 9381}
+	mysql: {'name': 'rag_flow', 'user': 'root', 'password': '********', 'host': 'mysql', 'port': 3306, 'max_connections': 900, 'stale_timeout': 300, 'max_allowed_packet': 1073741824}
+	minio: {'user': 'rag_flow', 'password': '********', 'host': 'minio:9000', 'bucket': '', 'prefix_path': ''}
+	es: {'hosts': 'http://es01:9200', 'username': 'elastic', 'password': '********'}
+	os: {'hosts': 'http://opensearch01:9201', 'username': 'admin', 'password': '********'}
+	infinity: {'uri': 'infinity:23817', 'postgres_port': 5432, 'db_name': 'default_db'}
+	oceanbase: {'scheme': 'oceanbase', 'config': {'db_name': 'ragflow_doc', 'user': 'root@ragflow', 'password': 'infini_rag_flow', 'host': 'oceanbase', 'port': 2881}}
+	seekdb: {'scheme': 'oceanbase', 'config': {'db_name': 'ragflow_doc', 'user': 'root', 'password': 'infini_rag_flow', 'host': 'seekdb', 'port': 2881}}
+	redis: {'db': 1, 'username': '', 'password': '********', 'host': 'redis:6379'}
+	user_default_llm: {'default_models': {'embedding_model': {'api_key': 'xxx', 'base_url': 'http://tei:80'}}}
+2026-03-18 11:16:11,951 WARNING  27 SECURITY WARNING: Using auto-generated SECRET_KEY.
+2026-03-18 11:16:11,969 INFO     27 GET http://es01:9200/ [status:200 duration:0.012s]
+2026-03-18 11:16:11,977 INFO     27 HEAD http://es01:9200/ [status:200 duration:0.007s]
+2026-03-18 11:16:11,977 INFO     27 Use Elasticsearch http://es01:9200 as the doc engine.
+2026-03-18 11:16:11,978 INFO     27 Elasticsearch http://es01:9200 is healthy.
+2026-03-18 11:16:11,978 INFO     27 Use Elasticsearch http://es01:9200 as the doc engine.
+2026-03-18 11:16:11,978 INFO     27 Elasticsearch http://es01:9200 is healthy.
+2026-03-18 11:16:11,990 WARNING  27 Load term.freq FAIL!
+2026-03-18 11:16:12,007 WARNING  27 Realtime synonym is disabled, since no redis connection.
+2026-03-18 11:16:12,029 WARNING  27 Load term.freq FAIL!
+2026-03-18 11:16:12,051 WARNING  27 Realtime synonym is disabled, since no redis connection.
+2026-03-18 11:16:12,052 INFO     27 can't import package 'torch'
+2026-03-18 11:16:12,053 INFO     27 default embedding config: {'model': '', 'factory': '', 'api_key': 'xxx', 'base_url': 'http://tei:80'}
+2026-03-18 11:16:12,053 INFO     27 MAX_CONTENT_LENGTH: 134217728
+2026-03-18 11:16:12,053 INFO     27 MAX_FILE_COUNT_PER_USER: 0
+2026-03-18 11:16:12,054 INFO     27 RAGFlow ingestion is ready after 119.28510785102844s initialization.
+2026-03-18 11:16:12,100 INFO     27 task_executor_12a3575b0bdb_0 reported heartbeat: {"ip_address": "192.168.48.6", "pid": 27, "name": "task_executor_12a3575b0bdb_0", "now": "2026-03-18T11:16:12.093+08:00", "boot_at": "2026-03-18T11:16:11.584+08:00", "pending": 0, "lag": 0, "done": 0, "failed": 0, "current": {}}
+2026-03-18 11:16:12,104 INFO     27 task_consumer_0 expired, removed
+2026-03-18 11:16:12,106 WARNING  27 RedisDB.get_unacked_iterator queue rag_flow_svr_queue_1 doesn't exist
+2026-03-18 11:16:42,204 WARNING  27 RedisDB.queue_info rag_flow_svr_queue got exception: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:42,210 WARNING  27 RedisDB.queue_info rag_flow_svr_queue got exception: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:42,215 WARNING  27 RedisDB.queue_info rag_flow_svr_queue got exception: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:42,219 WARNING  27 RedisDB.zadd task_executor_12a3575b0bdb_0 got exception: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:42,220 INFO     27 task_executor_12a3575b0bdb_0 reported heartbeat: {"ip_address": "192.168.48.6", "pid": 27, "name": "task_executor_12a3575b0bdb_0", "now": "2026-03-18T11:16:42.111+08:00", "boot_at": "2026-03-18T11:16:11.584+08:00", "pending": 0, "lag": 0, "done": 0, "failed": 0, "current": {}}
+2026-03-18 11:16:42,224 WARNING  27 RedisDB.zremrangebyscore task_executor_12a3575b0bdb_0 got exception: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:42,228 WARNING  27 Failed to acquire Redis lock: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:42,502 ERROR    27 RedisDB.queue_consumer rag_flow_svr_queue_1 got exception: Error 111 connecting to redis:6379. Connection refused.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 186, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+                ^^^^^^^^^^^^^^^^^^^^^^
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 728, in _connect
+    raise err
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 716, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 369, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:42,514 ERROR    27 RedisDB.queue_consumer rag_flow_svr_queue_1 got exception: Error 111 connecting to redis:6379. Connection refused.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 186, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+                ^^^^^^^^^^^^^^^^^^^^^^
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 728, in _connect
+    raise err
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 716, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 369, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:42,520 ERROR    27 RedisDB.queue_consumer rag_flow_svr_queue_1 got exception: Error 111 connecting to redis:6379. Connection refused.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 186, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+                ^^^^^^^^^^^^^^^^^^^^^^
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 728, in _connect
+    raise err
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 716, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 369, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:42,527 ERROR    27 RedisDB.queue_consumer rag_flow_svr_queue got exception: Error 111 connecting to redis:6379. Connection refused.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 186, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+                ^^^^^^^^^^^^^^^^^^^^^^
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 728, in _connect
+    raise err
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 716, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 369, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:42,532 ERROR    27 RedisDB.queue_consumer rag_flow_svr_queue got exception: Error 111 connecting to redis:6379. Connection refused.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 186, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+                ^^^^^^^^^^^^^^^^^^^^^^
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 728, in _connect
+    raise err
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 716, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 369, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:42,538 ERROR    27 RedisDB.queue_consumer rag_flow_svr_queue got exception: Error 111 connecting to redis:6379. Connection refused.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 186, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+                ^^^^^^^^^^^^^^^^^^^^^^
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 728, in _connect
+    raise err
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 716, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 369, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:42,701 ERROR    27 RedisDB.queue_consumer rag_flow_svr_queue_1 got exception: Error 111 connecting to redis:6379. Connection refused.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 186, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+                ^^^^^^^^^^^^^^^^^^^^^^
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 728, in _connect
+    raise err
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 716, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 369, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:42,709 ERROR    27 RedisDB.queue_consumer rag_flow_svr_queue_1 got exception: Error 111 connecting to redis:6379. Connection refused.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 186, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+                ^^^^^^^^^^^^^^^^^^^^^^
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 728, in _connect
+    raise err
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 716, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 369, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:42,723 ERROR    27 RedisDB.queue_consumer rag_flow_svr_queue_1 got exception: Error 111 connecting to redis:6379. Connection refused.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 186, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+                ^^^^^^^^^^^^^^^^^^^^^^
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 728, in _connect
+    raise err
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 716, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 369, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:42,731 ERROR    27 RedisDB.queue_consumer rag_flow_svr_queue got exception: Error 111 connecting to redis:6379. Connection refused.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 186, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+                ^^^^^^^^^^^^^^^^^^^^^^
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 728, in _connect
+    raise err
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 716, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 369, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:42,738 ERROR    27 RedisDB.queue_consumer rag_flow_svr_queue got exception: Error 111 connecting to redis:6379. Connection refused.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 186, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+                ^^^^^^^^^^^^^^^^^^^^^^
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 728, in _connect
+    raise err
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 716, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 369, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:42,746 ERROR    27 RedisDB.queue_consumer rag_flow_svr_queue got exception: Error 111 connecting to redis:6379. Connection refused.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 186, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+                ^^^^^^^^^^^^^^^^^^^^^^
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 728, in _connect
+    raise err
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 716, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 369, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:42,903 ERROR    27 RedisDB.queue_consumer rag_flow_svr_queue_1 got exception: Error 111 connecting to redis:6379. Connection refused.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 186, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+                ^^^^^^^^^^^^^^^^^^^^^^
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 728, in _connect
+    raise err
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 716, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 369, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:42,912 ERROR    27 RedisDB.queue_consumer rag_flow_svr_queue_1 got exception: Error 111 connecting to redis:6379. Connection refused.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 186, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+                ^^^^^^^^^^^^^^^^^^^^^^
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 728, in _connect
+    raise err
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 716, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 369, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:42,920 ERROR    27 RedisDB.queue_consumer rag_flow_svr_queue_1 got exception: Error 111 connecting to redis:6379. Connection refused.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 186, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+                ^^^^^^^^^^^^^^^^^^^^^^
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 728, in _connect
+    raise err
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 716, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 369, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:42,928 ERROR    27 RedisDB.queue_consumer rag_flow_svr_queue got exception: Error 111 connecting to redis:6379. Connection refused.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 186, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+                ^^^^^^^^^^^^^^^^^^^^^^
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 728, in _connect
+    raise err
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 716, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 369, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:42,939 ERROR    27 RedisDB.queue_consumer rag_flow_svr_queue got exception: Error 111 connecting to redis:6379. Connection refused.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 186, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+                ^^^^^^^^^^^^^^^^^^^^^^
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 728, in _connect
+    raise err
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 716, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 369, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:42,951 ERROR    27 RedisDB.queue_consumer rag_flow_svr_queue got exception: Error 111 connecting to redis:6379. Connection refused.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 186, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+                ^^^^^^^^^^^^^^^^^^^^^^
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 728, in _connect
+    raise err
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 716, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 369, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:43,106 ERROR    27 RedisDB.queue_consumer rag_flow_svr_queue_1 got exception: Error 111 connecting to redis:6379. Connection refused.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 186, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+                ^^^^^^^^^^^^^^^^^^^^^^
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 728, in _connect
+    raise err
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 716, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 369, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:43,114 ERROR    27 RedisDB.queue_consumer rag_flow_svr_queue_1 got exception: Error 111 connecting to redis:6379. Connection refused.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 186, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+                ^^^^^^^^^^^^^^^^^^^^^^
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 728, in _connect
+    raise err
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 716, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 369, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:43,122 ERROR    27 RedisDB.queue_consumer rag_flow_svr_queue_1 got exception: Error 111 connecting to redis:6379. Connection refused.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 186, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+                ^^^^^^^^^^^^^^^^^^^^^^
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 728, in _connect
+    raise err
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 716, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 369, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:43,128 ERROR    27 RedisDB.queue_consumer rag_flow_svr_queue got exception: Error 111 connecting to redis:6379. Connection refused.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 186, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+                ^^^^^^^^^^^^^^^^^^^^^^
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 728, in _connect
+    raise err
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 716, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 369, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:43,135 ERROR    27 RedisDB.queue_consumer rag_flow_svr_queue got exception: Error 111 connecting to redis:6379. Connection refused.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 186, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+                ^^^^^^^^^^^^^^^^^^^^^^
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 728, in _connect
+    raise err
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 716, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 369, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:43,141 ERROR    27 RedisDB.queue_consumer rag_flow_svr_queue got exception: Error 111 connecting to redis:6379. Connection refused.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 186, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+                ^^^^^^^^^^^^^^^^^^^^^^
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 728, in _connect
+    raise err
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 716, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 369, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:43,314 ERROR    27 RedisDB.queue_consumer rag_flow_svr_queue_1 got exception: Error 111 connecting to redis:6379. Connection refused.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 186, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+                ^^^^^^^^^^^^^^^^^^^^^^
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 728, in _connect
+    raise err
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 716, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 369, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:43,321 ERROR    27 RedisDB.queue_consumer rag_flow_svr_queue_1 got exception: Error 111 connecting to redis:6379. Connection refused.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 186, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+                ^^^^^^^^^^^^^^^^^^^^^^
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 728, in _connect
+    raise err
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 716, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 369, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:43,327 ERROR    27 RedisDB.queue_consumer rag_flow_svr_queue_1 got exception: Error 111 connecting to redis:6379. Connection refused.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 186, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+                ^^^^^^^^^^^^^^^^^^^^^^
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 728, in _connect
+    raise err
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 716, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 369, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:43,334 ERROR    27 RedisDB.queue_consumer rag_flow_svr_queue got exception: Error 111 connecting to redis:6379. Connection refused.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 186, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+                ^^^^^^^^^^^^^^^^^^^^^^
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 728, in _connect
+    raise err
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 716, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 369, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:43,345 ERROR    27 RedisDB.queue_consumer rag_flow_svr_queue got exception: Error 111 connecting to redis:6379. Connection refused.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 186, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+                ^^^^^^^^^^^^^^^^^^^^^^
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 728, in _connect
+    raise err
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 716, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 369, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:43,355 ERROR    27 RedisDB.queue_consumer rag_flow_svr_queue got exception: Error 111 connecting to redis:6379. Connection refused.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 186, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+                ^^^^^^^^^^^^^^^^^^^^^^
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 728, in _connect
+    raise err
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 716, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 369, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:47,546 ERROR    27 RedisDB.queue_consumer rag_flow_svr_queue_1 got exception: Error 111 connecting to redis:6379. Connection refused.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 186, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+                ^^^^^^^^^^^^^^^^^^^^^^
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 728, in _connect
+    raise err
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 716, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 369, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:47,554 ERROR    27 RedisDB.queue_consumer rag_flow_svr_queue_1 got exception: Error 111 connecting to redis:6379. Connection refused.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 186, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+                ^^^^^^^^^^^^^^^^^^^^^^
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 728, in _connect
+    raise err
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 716, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 369, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:47,562 ERROR    27 RedisDB.queue_consumer rag_flow_svr_queue_1 got exception: Error 111 connecting to redis:6379. Connection refused.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 186, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+                ^^^^^^^^^^^^^^^^^^^^^^
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 728, in _connect
+    raise err
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 716, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 369, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:47,570 ERROR    27 RedisDB.queue_consumer rag_flow_svr_queue got exception: Error 111 connecting to redis:6379. Connection refused.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 186, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+                ^^^^^^^^^^^^^^^^^^^^^^
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 728, in _connect
+    raise err
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 716, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 369, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:47,576 ERROR    27 RedisDB.queue_consumer rag_flow_svr_queue got exception: Error 111 connecting to redis:6379. Connection refused.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 186, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+                ^^^^^^^^^^^^^^^^^^^^^^
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 728, in _connect
+    raise err
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 716, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 369, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:47,583 ERROR    27 RedisDB.queue_consumer rag_flow_svr_queue got exception: Error 111 connecting to redis:6379. Connection refused.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 186, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+                ^^^^^^^^^^^^^^^^^^^^^^
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 728, in _connect
+    raise err
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 716, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 369, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:47,755 ERROR    27 RedisDB.queue_consumer rag_flow_svr_queue_1 got exception: Error 111 connecting to redis:6379. Connection refused.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 186, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+                ^^^^^^^^^^^^^^^^^^^^^^
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 728, in _connect
+    raise err
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 716, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 369, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:47,761 ERROR    27 RedisDB.queue_consumer rag_flow_svr_queue_1 got exception: Error 111 connecting to redis:6379. Connection refused.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 186, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+                ^^^^^^^^^^^^^^^^^^^^^^
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 728, in _connect
+    raise err
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 716, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 369, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:47,767 ERROR    27 RedisDB.queue_consumer rag_flow_svr_queue_1 got exception: Error 111 connecting to redis:6379. Connection refused.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 186, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+                ^^^^^^^^^^^^^^^^^^^^^^
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 728, in _connect
+    raise err
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 716, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 369, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:47,773 ERROR    27 RedisDB.queue_consumer rag_flow_svr_queue got exception: Error 111 connecting to redis:6379. Connection refused.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 186, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+                ^^^^^^^^^^^^^^^^^^^^^^
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 728, in _connect
+    raise err
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 716, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 369, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:47,781 ERROR    27 RedisDB.queue_consumer rag_flow_svr_queue got exception: Error 111 connecting to redis:6379. Connection refused.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 186, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+                ^^^^^^^^^^^^^^^^^^^^^^
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 728, in _connect
+    raise err
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 716, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 369, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:47,788 ERROR    27 RedisDB.queue_consumer rag_flow_svr_queue got exception: Error 111 connecting to redis:6379. Connection refused.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 186, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+                ^^^^^^^^^^^^^^^^^^^^^^
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 728, in _connect
+    raise err
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 716, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 369, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:47,960 ERROR    27 RedisDB.queue_consumer rag_flow_svr_queue_1 got exception: Error 111 connecting to redis:6379. Connection refused.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 186, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+                ^^^^^^^^^^^^^^^^^^^^^^
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 728, in _connect
+    raise err
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 716, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 369, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:47,966 ERROR    27 RedisDB.queue_consumer rag_flow_svr_queue_1 got exception: Error 111 connecting to redis:6379. Connection refused.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 186, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+                ^^^^^^^^^^^^^^^^^^^^^^
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 728, in _connect
+    raise err
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 716, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 369, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:47,972 ERROR    27 RedisDB.queue_consumer rag_flow_svr_queue_1 got exception: Error 111 connecting to redis:6379. Connection refused.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 186, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+                ^^^^^^^^^^^^^^^^^^^^^^
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 728, in _connect
+    raise err
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 716, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 369, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:47,978 ERROR    27 RedisDB.queue_consumer rag_flow_svr_queue got exception: Error 111 connecting to redis:6379. Connection refused.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 186, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+                ^^^^^^^^^^^^^^^^^^^^^^
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 728, in _connect
+    raise err
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 716, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 369, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:47,984 ERROR    27 RedisDB.queue_consumer rag_flow_svr_queue got exception: Error 111 connecting to redis:6379. Connection refused.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 186, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+                ^^^^^^^^^^^^^^^^^^^^^^
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 728, in _connect
+    raise err
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 716, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 369, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:47,990 ERROR    27 RedisDB.queue_consumer rag_flow_svr_queue got exception: Error 111 connecting to redis:6379. Connection refused.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 186, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+                ^^^^^^^^^^^^^^^^^^^^^^
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 728, in _connect
+    raise err
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 716, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 369, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:48,150 ERROR    27 RedisDB.queue_consumer rag_flow_svr_queue_1 got exception: Error 111 connecting to redis:6379. Connection refused.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 186, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+                ^^^^^^^^^^^^^^^^^^^^^^
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 728, in _connect
+    raise err
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 716, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 369, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:48,156 ERROR    27 RedisDB.queue_consumer rag_flow_svr_queue_1 got exception: Error 111 connecting to redis:6379. Connection refused.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 186, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+                ^^^^^^^^^^^^^^^^^^^^^^
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 728, in _connect
+    raise err
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 716, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 369, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:48,162 ERROR    27 RedisDB.queue_consumer rag_flow_svr_queue_1 got exception: Error 111 connecting to redis:6379. Connection refused.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 186, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+                ^^^^^^^^^^^^^^^^^^^^^^
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 728, in _connect
+    raise err
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 716, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 369, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:48,171 ERROR    27 RedisDB.queue_consumer rag_flow_svr_queue got exception: Error 111 connecting to redis:6379. Connection refused.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 186, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+                ^^^^^^^^^^^^^^^^^^^^^^
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 728, in _connect
+    raise err
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 716, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 369, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:48,176 ERROR    27 RedisDB.queue_consumer rag_flow_svr_queue got exception: Error 111 connecting to redis:6379. Connection refused.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 186, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+                ^^^^^^^^^^^^^^^^^^^^^^
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 728, in _connect
+    raise err
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 716, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 369, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:48,181 ERROR    27 RedisDB.queue_consumer rag_flow_svr_queue got exception: Error 111 connecting to redis:6379. Connection refused.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 186, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+                ^^^^^^^^^^^^^^^^^^^^^^
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 728, in _connect
+    raise err
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 716, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 369, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:48,365 ERROR    27 RedisDB.queue_consumer rag_flow_svr_queue_1 got exception: Error 111 connecting to redis:6379. Connection refused.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 186, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+                ^^^^^^^^^^^^^^^^^^^^^^
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 728, in _connect
+    raise err
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 716, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 369, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:48,371 ERROR    27 RedisDB.queue_consumer rag_flow_svr_queue_1 got exception: Error 111 connecting to redis:6379. Connection refused.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 186, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+                ^^^^^^^^^^^^^^^^^^^^^^
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 728, in _connect
+    raise err
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 716, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 369, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:48,379 ERROR    27 RedisDB.queue_consumer rag_flow_svr_queue_1 got exception: Error 111 connecting to redis:6379. Connection refused.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 186, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+                ^^^^^^^^^^^^^^^^^^^^^^
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 728, in _connect
+    raise err
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 716, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 369, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:48,385 ERROR    27 RedisDB.queue_consumer rag_flow_svr_queue got exception: Error 111 connecting to redis:6379. Connection refused.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 186, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+                ^^^^^^^^^^^^^^^^^^^^^^
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 728, in _connect
+    raise err
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 716, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 369, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:48,392 ERROR    27 RedisDB.queue_consumer rag_flow_svr_queue got exception: Error 111 connecting to redis:6379. Connection refused.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 186, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+                ^^^^^^^^^^^^^^^^^^^^^^
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 728, in _connect
+    raise err
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 716, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 369, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error 111 connecting to redis:6379. Connection refused.
+2026-03-18 11:16:48,399 ERROR    27 RedisDB.queue_consumer rag_flow_svr_queue got exception: Error 111 connecting to redis:6379. Connection refused.
+Traceback (most recent call last):
+  File "/ragflow/rag/svr/task_executor.py", line 186, in collect
+    redis_msg = next(UNACKED_ITERATOR)
+                ^^^^^^^^^^^^^^^^^^^^^^
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 302, in connect
+    sock = self.retry.call_with_retry(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/retry.py", line 62, in call_with_retry
+    return do()
+           ^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 303, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+            ^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 728, in _connect
+    raise err
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 716, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/ragflow/rag/utils/redis_conn.py", line 369, in queue_consumer
+    group_info = self.REDIS.xinfo_groups(queue_name)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/commands/core.py", line 3810, in xinfo_groups
+    return self.execute_command("XINFO GROUPS", name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/client.py", line 564, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 1107, in get_connection
+    connection.connect()
+  File "/ragflow/.venv/lib/python3.12/site-packages/valkey/connection.py", line 308, in connect
+    raise ConnectionError(self._error_message(e))
+valkey.exceptions.ConnectionError: Error 111 connecting to redis:6379. Connection refused.
