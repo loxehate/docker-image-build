@@ -171,10 +171,10 @@ RUN --mount=type=cache,id=ragflow_npm,target=/root/.npm,sharing=locked \
     export NODE_OPTIONS="--max-old-space-size=4096" && \
     cd web && npm install && npm run build
 
-COPY .git /ragflow/.git
+# COPY .git /ragflow/.git
 
-RUN version_info=$(git describe --tags --match=v* --first-parent --always); \
-    version_info="$version_info"; \
+# RUN version_info=$(git describe --tags --match=v* --first-parent --always); \
+RUN version_info="1.0.0"; \
     echo "RAGFlow version: $version_info"; \
     echo $version_info > /ragflow/VERSION
 
