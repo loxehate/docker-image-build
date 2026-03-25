@@ -1,282 +1,300 @@
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
 [project]
-name = "ragflow"
-version = "0.24.0"
-description = "[RAGFlow](https://ragflow.io/) is an open-source RAG (Retrieval-Augmented Generation) engine based on deep document understanding. It offers a streamlined RAG workflow for businesses of any scale, combining LLM (Large Language Models) to provide truthful question-answering capabilities, backed by well-founded citations from various complex formatted data."
-authors = [{ name = "Zhichang Yu", email = "yuzhichang@gmail.com" }]
-license-files = ["LICENSE"]
+name = "doris-mcp-server"
+version = "0.6.1"
+description = "Enterprise-grade Model Context Protocol (MCP) server implementation for Apache Doris"
+authors = [
+    {name = "Yijia Su", email = "freeoneplus@apache.org"}
+]
 readme = "README.md"
-requires-python = ">=3.12,<3.15"
+license = {text = "Apache-2.0"}
+requires-python = ">=3.12"
+keywords = ["doris", "mcp", "model-context-protocol", "database", "analytics"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Database",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+]
+
 dependencies = [
-    "aiosmtplib>=5.0.0",
-    "akshare>=1.15.78,<2.0.0",
-    "anthropic==0.34.1",
-    "arxiv==2.1.3",
-    "atlassian-python-api==4.0.7",
-    "azure-identity==1.17.1",
-    "azure-storage-file-datalake==12.16.0",
-    "beartype>=0.20.0,<1.0.0",
-    "bio==1.7.1",
-    "boxsdk>=10.1.0",
-    "captcha>=0.7.1",
-    "cn2an==0.5.22",
-    "cohere==5.6.2",
-    "Crawl4AI>=0.4.0,<1.0.0",
-    "dashscope==1.25.11",
-    "deepl==1.18.0",
-    "demjson3==3.0.6",
-    "discord-py==2.3.2",
-    "dropbox==12.0.2",
-    "duckduckgo-search>=7.2.0,<8.0.0",
-    "editdistance==0.8.1",
-    "elasticsearch-dsl==8.12.0",
-    "exceptiongroup>=1.3.0,<2.0.0",
-    "extract-msg>=0.39.0",
-    "ffmpeg-python>=0.2.0",
-    "flasgger>=0.9.7.1,<0.10.0",
-    "flask-cors==6.0.2",
-    "flask-login==0.6.3",
-    "flask-mail>=0.10.0",
-    "flask-session==0.8.0",
-    "google-auth-oauthlib>=1.2.0,<2.0.0",
-    "google-genai>=1.41.0,<2.0.0",
-    "google-generativeai>=0.8.1,<0.9.0", # Needed for cv_model and embedding_model
-    "google-search-results==2.4.2",
-    "graspologic @ git+https://github.com/yuzhichang/graspologic.git@38e680cab72bc9fb68a7992c3bcc2d53b24e42fd",
-    "groq==0.9.0",
-    "grpcio-status==1.67.1",
-    "html-text==0.6.2",
-    "infinity-sdk==0.7.0-dev2",
-    "infinity-emb>=0.0.66,<0.0.67",
-    "jira==3.10.5",
-    "json-repair==0.35.0",
-    "langfuse>=2.60.0",
-    "mammoth>=1.11.0",
-    "markdown==3.6",
-    "markdown-to-json==2.1.1",
-    "markdownify>=1.2.0",
-    "mcp>=1.19.0",
-    "mini-racer>=0.12.4,<0.13.0",
-    "minio==7.2.4",
-    "mistralai==0.4.2",
-    "mysql-connector-python>=9.0.0,<10.0.0",
-    "moodlepy>=0.23.0",
-    "mypy-boto3-s3==1.40.26",
-    "Office365-REST-Python-Client==2.6.2",
-    "ollama>=0.5.0",
-    "onnxruntime==1.23.2; sys_platform == 'darwin' or platform_machine != 'x86_64'",
-    "onnxruntime-gpu==1.23.2; sys_platform != 'darwin' and platform_machine == 'x86_64'",
-    "opencv-python==4.10.0.84",
-    "opencv-python-headless==4.10.0.84",
-    "opendal>=0.45.0,<0.46.0",
-    "opensearch-py==2.7.1",
-    "ormsgpack==1.5.0",
-    "pdfplumber==0.10.4",
-    "pluginlib==0.9.4",
-    "psycopg2-binary>=2.9.11,<3.0.0",
-    "pyclipper>=1.4.0,<2.0.0",
-    # "pywencai>=0.13.1,<1.0.0",  # Temporarily disabled: conflicts with agentrun-sdk (pydash>=8), needed for agent/tools/wencai.py
-    "pycryptodomex==3.20.0",
-    "pyobvector==0.2.22",
-    "pyodbc>=5.2.0,<6.0.0",
-    "pypandoc>=1.16",
-    "pypdf>=6.6.2",
-    "pypdf2>=3.0.1,<4.0.0",
-    "python-calamine>=0.4.0",
-    "python-docx>=1.1.2,<2.0.0",
-    "python-pptx>=1.0.2,<2.0.0",
-    # "pywencai>=0.13.1,<1.0.0",  # Temporarily disabled: conflicts with agentrun-sdk (pydash>=8), needed for agent/tools/wencai.py
-    "qianfan==0.4.6",
-    "quart-auth==0.11.0",
-    "quart-cors==0.8.0",
-    "ranx==0.3.20",
-    "readability-lxml>=0.8.4,<1.0.0",
-    "replicate==0.31.0",
-    "reportlab>=4.4.1",
-    "roman-numbers==1.0.2",
-    "ruamel-base==1.0.0",
-    "ruamel-yaml>=0.18.6,<0.19.0",
-    "scholarly==1.7.11",
-    "selenium-wire==5.1.0",
-    "slack-sdk==3.37.0",
-    "socksio==1.0.0",
-    "agentrun-sdk>=0.0.16,<1.0.0",
-    "nest-asyncio>=1.6.0,<2.0.0",  # Needed for agent/component/message.py
-    "sqlglotrs==0.9.0",
-    "strenum==0.4.15",
-    "tavily-python==0.5.1",
-    "tencentcloud-sdk-python==3.0.1478",
-    "tika==2.6.0",
-    "valkey==6.0.2",
-    "vertexai==1.70.0",
-    "volcengine==1.0.194",
-    "voyageai==0.2.3",
-    "webdav4>=0.10.0,<0.11.0",
-    "webdriver-manager==4.0.1",
-    "wikipedia==1.4.0",
-    "word2number==1.1",
-    "xgboost==1.6.0",
-    "xpinyin==0.7.6",
-    "yfinance==0.2.65",
-    "zhipuai==2.0.1",
-    #    following modules aren't necessary
-    #    "nltk==3.9.1",
-    #    "numpy>=1.26.0,<2.0.0",
-    #    "openai>=1.45.0",
-    #    "openpyxl>=3.1.0,<4.0.0",
-    #    "pandas>=2.2.0,<3.0.0",
-    #    "peewee==3.17.1",
-    #    "pillow>=10.4.0,<13.0.0",
-    #    "protobuf==5.27.2",
-    #    "pymysql>=1.1.1,<2.0.0",
-    #    "python-dotenv==1.0.1",
-    #    "python-dateutil==2.8.2",
-    #    "Quart==0.20.0",
-    #    "requests>=2.32.3,<3.0.0",
-    #    "scikit-learn==1.5.0",
-    #    "selenium==4.22.0",
-    #    "setuptools>=78.1.1,<81.0.0",
-    #    "shapely==2.0.5",
-    #    "six==1.16.0",
-    #    "tabulate==0.9.0",
-    #    "tiktoken==0.7.0",
-    #    "umap_learn==0.5.6",
-    #    "werkzeug==3.0.6",
-    #    "xxhash>=3.5.0,<4.0.0",
-    #    "trio>=0.17.0,<0.29.0",
-    #    "debugpy>=1.8.13",
-    #    "click>=8.1.8",
-    #    "litellm>=1.74.15.post1",
-    #    "lark>=1.2.2",
-    #    "pip>=25.2",
-    #    "imageio-ffmpeg>=0.6.0",
-    #    "cryptography==46.0.3",
-    #    "jinja2>=3.1.0",
-    "pyairtable>=3.3.0",
-    "pygithub>=2.8.1",
-    "asana>=5.2.2",
-    "python-gitlab>=7.0.0",
-    "quart-schema==0.23.0",
+    # Core MCP dependencies
+    "mcp>=1.8.0,<2.0.0",
+    # Database drivers
+    "aiomysql>=0.2.0",
+    "PyMySQL>=1.1.0",
+    # ADBC (Arrow Flight SQL) dependencies
+    "adbc-driver-manager>=0.8.0",
+    "adbc-driver-flightsql>=0.8.0",
+    "pyarrow>=14.0.0",
+    # Async and utility libraries
+    "asyncio-mqtt>=0.16.0",
+    "aiofiles>=23.0.0",
+    "aiohttp>=3.9.0",
+    "aioredis>=2.0.0",
+    # Data processing
+    "pandas>=2.0.0",
+    "numpy>=1.24.0",
+    "python-dateutil>=2.8.0",
+    "orjson>=3.9.0",
+    # Configuration and serialization
+    "pydantic>=2.5.0",
+    "pydantic-settings>=2.1.0",
+    "toml>=0.10.0",
+    "PyYAML>=6.0.0",
+    "python-dotenv>=1.0.0",
+    # Security and authentication
+    "cryptography>=41.0.0",
+    "PyJWT>=2.8.0",
+    "passlib[bcrypt]>=1.7.0",
+    "bcrypt>=4.1.0",
+    "sqlparse>=0.4.4",
+    "python-jose[cryptography]>=3.3.0",
+    "python-multipart>=0.0.6",
+    # Monitoring and logging
+    "prometheus-client>=0.19.0",
+    "structlog>=23.2.0",
+    "rich>=13.7.0",
+    # HTTP and networking
+    "httpx>=0.26.0",
+    "websockets>=12.0",
+    "uvicorn[standard]>=0.25.0",
+    "fastapi>=0.108.0",
+    "starlette>=0.27.0",
+    # Development utilities
+    "click>=8.1.0",
+    "typer>=0.9.0",
+    "requests>=2.31.0",
+    "tqdm>=4.66.0",
+    "pytest>=8.4.0",
+    "pytest-asyncio>=1.0.0",
+    "pytest-cov>=6.1.1",
 ]
 
-[dependency-groups]
-test = [
-    "hypothesis>=6.132.0",
-    "openpyxl>=3.1.5",
-    "pillow>=10.4.0,<13.0.0",
-    "pytest>=8.3.5",
-    "pytest-asyncio>=1.3.0",
-    "pytest-xdist>=3.8.0",
-    "pytest-cov>=7.0.0",
-    "python-docx>=1.1.2",
-    "python-pptx>=1.0.2",
-    "reportlab>=4.4.1",
-    "requests>=2.32.2",
-    "requests-toolbelt>=1.0.0",
-    "pycryptodomex==3.20.0",
-    "codecov>=2.1.13",
+[project.optional-dependencies]
+dev = [
+    # Testing
+    "pytest>=7.4.0",
+    "pytest-asyncio>=0.23.0",
+    "pytest-cov>=4.1.0",
+    "pytest-mock>=3.12.0",
+    "pytest-xdist>=3.5.0",
+    
+    # Code quality
+    "ruff>=0.1.0",
+    "black>=23.12.0",
+    "isort>=5.13.0",
+    "flake8>=7.0.0",
+    "mypy>=1.8.0",
+    "bandit>=1.7.0",
+    "safety>=2.3.0",
+    
+    # Documentation
+    "sphinx>=7.2.0",
+    "sphinx-rtd-theme>=2.0.0",
+    "myst-parser>=2.0.0",
+    
+    # Development tools
+    "pre-commit>=3.6.0",
+    "tox>=4.11.0",
 ]
 
-[[tool.uv.index]]
-url = "https://pypi.tuna.tsinghua.edu.cn/simple"
-
-[tool.setuptools]
-packages = [
-    'agent',
-    'api',
-    'deepdoc',
-    'graphrag',
-    'intergrations.chatgpt-on-wechat.plugins',
-    'mcp.server',
-    'rag',
-    'sdk.python.ragflow_sdk',
+docs = [
+    "sphinx>=7.2.0",
+    "sphinx-rtd-theme>=2.0.0",
+    "myst-parser>=2.0.0",
+    "sphinx-autoapi>=3.0.0",
 ]
 
-[tool.ruff]
-line-length = 200
-exclude = [".venv", "rag/svr/discord_svr.py"]
+performance = [
+    "uvloop>=0.19.0",  # High-performance event loop
+    "orjson>=3.9.0",   # Fast JSON serialization
+    "cchardet>=2.1.0", # Fast character encoding detection
+]
 
-[tool.ruff.lint]
-extend-select = ["ASYNC", "ASYNC1"]
-ignore = ["E402"]
+monitoring = [
+    "prometheus-client>=0.19.0",
+    "grafana-client>=3.5.0",
+    "jaeger-client>=4.8.0",
+    "opentelemetry-api>=1.21.0",
+    "opentelemetry-sdk>=1.21.0",
+]
 
+[project.urls]
+Homepage = "https://github.com/apache/doris-mcp-server"
+Documentation = "https://doris.apache.org/docs/"
+Repository = "https://github.com/apache/doris-mcp-server.git"
+Issues = "https://github.com/apache/doris-mcp-server/issues"
+Changelog = "https://github.com/apache/doris-mcp-server/blob/main/CHANGELOG.md"
+
+[project.scripts]
+doris-mcp-server = "doris_mcp_server.main:main_sync"
+doris-mcp-client = "doris_mcp_server.client:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["doris_mcp_server"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/doris_mcp_server",
+    "/README.md",
+    "/LICENSE",
+]
+
+# Black configuration
+[tool.black]
+line-length = 88
+target-version = ['py310', 'py311', 'py312']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+# isort configuration
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+line_length = 88
+known_first_party = ["doris_mcp_server"]
+known_third_party = ["mcp", "aiomysql", "pydantic", "click"]
+
+# MyPy configuration
+[tool.mypy]
+python_version = "3.12"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+
+[[tool.mypy.overrides]]
+module = [
+    "aiomysql.*",
+    "pymysql.*",
+    "prometheus_client.*",
+]
+ignore_missing_imports = true
+
+# Pytest configuration
 [tool.pytest.ini_options]
-pythonpath = [
-    "."
+minversion = "7.0"
+addopts = [
+    "--strict-markers",
+    "--strict-config",
+    "--cov=doris_mcp_server",
+    "--cov-report=term-missing",
+    "--cov-report=html",
+    "--cov-report=xml",
 ]
-
-testpaths = ["test"]
-python_files = ["test_*.py"]
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
-
 markers = [
-    "p1: high priority test cases",
-    "p2: medium priority test cases",
-    "p3: low priority test cases",
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "unit: marks tests as unit tests",
 ]
-
-# Test collection and runtime configuration
-filterwarnings = [
-    "error",  # Treat warnings as errors
-    "ignore::DeprecationWarning",  # Ignore specific warnings
-]
-
-# Command line options
-addopts = [
-    "-v",  # Verbose output
-    "--strict-markers",  # Enforce marker definitions
-    "--tb=short",  # Simplified traceback
-    "--disable-warnings",  # Disable warnings
-    "--color=yes"  # Colored output
-]
-
+asyncio_mode = "auto"
 
 # Coverage configuration
 [tool.coverage.run]
-# Source paths - adjust according to your project structure
-source = [
-    # "../../api/db/services",
-    # Add more directories if needed:
-    "../../common",
-    # "../../utils",
-]
-
-# Files/directories to exclude
+source = ["doris_mcp_server"]
 omit = [
     "*/tests/*",
     "*/test_*",
     "*/__pycache__/*",
-    "*/.pytest_cache/*",
     "*/venv/*",
-    "*/.venv/*",
-    "*/env/*",
-    "*/site-packages/*",
-    "*/dist/*",
-    "*/build/*",
-    "*/migrations/*",
-    "setup.py"
+    "*/.*",
 ]
 
 [tool.coverage.report]
-# Report configuration
-precision = 2
-show_missing = true
-skip_covered = false
-fail_under = 0  # Minimum coverage requirement (0-100)
-
-# Lines to exclude (optional)
 exclude_lines = [
-#    "pragma: no cover",
-#    "def __repr__",
-#    "raise AssertionError",
-#    "raise NotImplementedError",
-#    "if __name__ == .__main__.:",
-#    "if TYPE_CHECKING:",
-    "pass"
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
 ]
 
-[tool.coverage.html]
-# HTML report configuration
-directory = "htmlcov"
-title = "Test Coverage Report"
-# extra_css = "custom.css"  # Optional custom CSS
+# Bandit security linter configuration
+[tool.bandit]
+exclude_dirs = ["tests", "build", "dist"]
+tests = ["B201", "B301"]
+skips = ["B101", "B601"]
+
+# Ruff configuration (modern Python linter)
+[tool.ruff]
+target-version = "py312"
+line-length = 88
+
+[tool.ruff.lint]
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "B",  # flake8-bugbear
+    "C4", # flake8-comprehensions
+    "UP", # pyupgrade
+]
+ignore = [
+    "E501",  # line too long, handled by black
+    "B008",  # do not perform function calls in argument defaults
+    "C901",  # too complex
+    "B904",  # raise from err
+]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"] 
+
+[dependency-groups]
+dev = [
+    "ruff>=0.11.13",
+]
+ 
