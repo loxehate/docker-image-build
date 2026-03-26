@@ -1,1 +1,1 @@
-doris-mcp-server:v1
+ghcr.io/volcengine/openviking:v1
