@@ -1,67 +1,78 @@
-# Licensed to the Apache Software Foundation (ASF) under one
-# or more contributor license agreements.  See the NOTICE file
-# distributed with this work for additional information
-# regarding copyright ownership.  The ASF licenses this file
-# to you under the Apache License, Version 2.0 (the
-# "License"); you may not use this file except in compliance
-# with the License.  You may obtain a copy of the License at
-#
-#   http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing,
-# software distributed under the License is distributed on an
-# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-# KIND, either express or implied.  See the License for the
-# specific language governing permissions and limitations
-# under the License.
-# Use Python 3.12 as base image
-FROM python:3.12-slim
+# syntax=docker/dockerfile:1.9
 
-# Set working directory
+# Stage 1: provide Go toolchain (required by setup.py -> build_agfs_artifacts -> make build)
+FROM golang:1.26-trixie AS go-toolchain
+
+# Stage 2: provide Rust toolchain (required by setup.py -> build_ov_cli_artifact -> cargo build)
+FROM rust:1.88-trixie AS rust-toolchain
+
+# Stage 3: build Python environment with uv (builds AGFS + Rust CLI + C++ extension from source)
+FROM ghcr.io/astral-sh/uv:python3.13-trixie-slim AS py-builder
+
+# Reuse Go toolchain from stage 1 so setup.py can compile agfs-server in-place.
+COPY --from=go-toolchain /usr/local/go /usr/local/go
+# Reuse Rust toolchain from stage 2 so setup.py can compile ov CLI in-place.
+COPY --from=rust-toolchain /usr/local/cargo /usr/local/cargo
+COPY --from=rust-toolchain /usr/local/rustup /usr/local/rustup
+ENV CARGO_HOME=/usr/local/cargo
+ENV RUSTUP_HOME=/usr/local/rustup
+ENV PATH="/usr/local/cargo/bin:/usr/local/go/bin:${PATH}"
+ARG OPENVIKING_VERSION=0.0.0
+ARG TARGETPLATFORM
+ENV SETUPTOOLS_SCM_PRETEND_VERSION_FOR_OPENVIKING=${OPENVIKING_VERSION}
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    cmake \
+    git \
+ && rm -rf /var/lib/apt/lists/*
+
+ENV UV_COMPILE_BYTECODE=1
+ENV UV_LINK_MODE=copy
+ENV UV_NO_DEV=1
 WORKDIR /app
 
-# Set environment variables
-ENV PYTHONPATH=/app
-ENV PYTHONUNBUFFERED=1
-ENV DEBIAN_FRONTEND=noninteractive
+# Copy source required for setup.py artifact builds and native extension build.
+COPY Cargo.toml Cargo.lock ./
+COPY pyproject.toml uv.lock setup.py README.md ./
+COPY build_support/ build_support/
+COPY crates/ crates/
+COPY openviking/ openviking/
+COPY openviking_cli/ openviking_cli/
+COPY src/ src/
+COPY third_party/ third_party/
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
+# Install project and dependencies (triggers setup.py artifact builds + build_extension).
+RUN --mount=type=cache,target=/root/.cache/uv,id=uv-${TARGETPLATFORM} \
+    uv sync --no-editable
+
+# Stage 4: runtime
+FROM python:3.13-slim-trixie
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates \
     curl \
-    gcc \
-    g++ \
-    pkg-config \
-    default-libmysqlclient-dev \
-    dos2unix \
-    && rm -rf /var/lib/apt/lists/*
+    libstdc++6 \
+ && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements file
-COPY requirements.txt .
+WORKDIR /app
 
-# Install Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+COPY --from=py-builder /app/.venv /app/.venv
+ENV PATH="/app/.venv/bin:$PATH"
+ENV OPENVIKING_CONFIG_FILE="/app/ov.conf"
+ENV OPENVIKING_HOST="0.0.0.0"
+ENV OPENVIKING_PORT="1933"
+ENV OPENVIKING_CONSOLE_HOST="0.0.0.0"
+ENV OPENVIKING_CONSOLE_PORT="8020"
+ENV OPENVIKING_CONSOLE_OPENVIKING_URL="http://127.0.0.1:1933"
 
-# Copy application code
-COPY . .
+EXPOSE 1933
+EXPOSE 8020
 
-# Convert line endings for shell scripts and ensure proper execution format
-RUN find . -name "*.sh" -exec dos2unix {} \; && \
-    find . -name "*.sh" -exec chmod +x {} \;
+HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \
+    CMD curl -fsS http://127.0.0.1:1933/health || exit 1
 
-# Create necessary directories
-RUN mkdir -p /app/logs /app/config /app/data
-
-# Create non-root user
-RUN groupadd -r doris && useradd -r -g doris doris
-RUN chown -R doris:doris /app
-USER doris
-
-# Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
-    CMD curl -f http://localhost:3000/health || exit 1
-
-# Expose ports
-EXPOSE 3000 3001 3002
-
-# Start command
-CMD ["/app/start_server.sh"]
+# Default runs both server and console in one container.
+# Override command to run CLI, e.g.:
+# docker run --rm <image> -v "$HOME/.openviking/ovcli.conf:/root/.openviking/ovcli.conf" openviking --help
+CMD ["sh", "-c", "openviking-server --host \"${OPENVIKING_HOST}\" --port \"${OPENVIKING_PORT}\" --config \"${OPENVIKING_CONFIG_FILE}\" & SERVER_PID=$!; openviking-console --host \"${OPENVIKING_CONSOLE_HOST}\" --port \"${OPENVIKING_CONSOLE_PORT}\" --openviking-url \"${OPENVIKING_CONSOLE_OPENVIKING_URL}\" & CONSOLE_PID=$!; trap 'kill $SERVER_PID $CONSOLE_PID' TERM INT; wait -n $SERVER_PID $CONSOLE_PID; EXIT_CODE=$?; kill $SERVER_PID $CONSOLE_PID 2>/dev/null || true; wait $SERVER_PID $CONSOLE_PID 2>/dev/null || true; exit $EXIT_CODE"]

@@ -1,135 +1,114 @@
-# Licensed to the Apache Software Foundation (ASF) under one
-# or more contributor license agreements.  See the NOTICE file
-# distributed with this work for additional information
-# regarding copyright ownership.  The ASF licenses this file
-# to you under the Apache License, Version 2.0 (the
-# "License"); you may not use this file except in compliance
-# with the License.  You may obtain a copy of the License at
-#
-#   http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing,
-# software distributed under the License is distributed on an
-# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-# KIND, either express or implied.  See the License for the
-# specific language governing permissions and limitations
-# under the License.
-# Doris MCP Server Makefile
-# Provides convenient commands using UV
+# Makefile for OpenViking
 
-.PHONY: help install sync dev test lint format build clean check start-stdio start-sse
+# Variables
+PYTHON ?= python3
+SETUP_PY := setup.py
+AGFS_SERVER_DIR := third_party/agfs/agfs-server
+OV_CLI_DIR := crates/ov_cli
 
-# Default target
+# Dependency Versions
+MIN_PYTHON_VERSION := 3.10
+MIN_GO_VERSION := 1.22
+MIN_CMAKE_VERSION := 3.12
+MIN_RUST_VERSION := 1.88
+MIN_GCC_VERSION := 9
+MIN_CLANG_VERSION := 11
+
+# Output directories to clean
+CLEAN_DIRS := \
+	build/ \
+	dist/ \
+	*.egg-info/ \
+	openviking/bin/ \
+	openviking/lib/ \
+	$(AGFS_SERVER_DIR)/build/ \
+	$(OV_CLI_DIR)/target/ \
+	src/cmake_build/ \
+	.pytest_cache/ \
+	.coverage \
+	htmlcov/ \
+	**/__pycache__/
+
+.PHONY: all build clean help check-pip check-deps
+
+all: build
+
 help:
-	@echo "Available commands:"
-	@echo "  install     - Install dependencies using UV"
-	@echo "  sync        - Sync dependencies and create virtual environment"
-	@echo "  dev         - Install development dependencies"
-	@echo "  test        - Run tests"
-	@echo "  lint        - Run linting tools"
-	@echo "  format      - Format code with black and isort"
-	@echo "  build       - Build the package"
-	@echo "  clean       - Clean build artifacts"
-	@echo "  check       - Run all checks (format, lint, test)"
-	@echo "  start-stdio - Start server in stdio mode"
-	@echo "  start-sse   - Start server in SSE mode"
+	@echo "Available targets:"
+	@echo "  build       - Build AGFS, ov CLI, and C++ extensions using setup.py"
+	@echo "  clean       - Remove build artifacts and temporary files"
+	@echo "  check-deps  - Check if required dependencies (Go, Rust, CMake, etc.) are installed"
+	@echo "  help        - Show this help message"
 
-# Install dependencies
-install:
-	uv sync
+check-pip:
+	@if command -v uv > /dev/null 2>&1 && uv pip --help > /dev/null 2>&1; then \
+		echo "  [OK] uv pip found"; \
+	elif $(PYTHON) -m pip --version > /dev/null 2>&1; then \
+		echo "  [OK] pip found"; \
+	else \
+		echo "Error: Neither uv pip nor pip found for $(PYTHON)."; \
+		echo "Try fixing your environment by running:"; \
+		echo "  uv sync          # if using uv"; \
+		echo "  or"; \
+		echo "  $(PYTHON) -m ensurepip --upgrade"; \
+		exit 1; \
+	fi
 
-# Sync dependencies with development extras
-sync:
-	uv sync
+check-deps:
+	@echo "Checking dependencies..."
+	@# Python check
+	@$(PYTHON) -c "import sys; v=sys.version_info; exit(0 if v.major > 3 or (v.major == 3 and v.minor >= 10) else 1)" || (echo "Error: Python >= $(MIN_PYTHON_VERSION) is required."; exit 1)
+	@echo "  [OK] Python $$( $(PYTHON) -V | cut -d' ' -f2 )"
+	@# Go check
+	@command -v go > /dev/null 2>&1 || (echo "Error: Go is not installed."; exit 1)
+	@GO_VER=$$(go version | awk '{print $$3}' | sed 's/go//'); \
+	$(PYTHON) -c "v='$$GO_VER'.split('.'); exit(0 if int(v[0]) > 1 or (int(v[0]) == 1 and int(v[1]) >= 22) else 1)" || (echo "Error: Go >= $(MIN_GO_VERSION) is required. Found $$GO_VER"; exit 1); \
+	echo "  [OK] Go $$GO_VER"
+	@# CMake check
+	@command -v cmake > /dev/null 2>&1 || (echo "Error: CMake is not installed."; exit 1)
+	@CMAKE_VER=$$(cmake --version | head -n1 | awk '{print $$3}'); \
+	$(PYTHON) -c "v='$$CMAKE_VER'.split('.'); exit(0 if int(v[0]) > 3 or (int(v[0]) == 3 and int(v[1]) >= 12) else 1)" || (echo "Error: CMake >= $(MIN_CMAKE_VERSION) is required. Found $$CMAKE_VER"; exit 1); \
+	echo "  [OK] CMake $$CMAKE_VER"
+	@# Rust check
+	@command -v rustc > /dev/null 2>&1 || (echo "Error: Rust is not installed."; exit 1)
+	@RUST_VER=$$(rustc --version | awk '{print $$2}'); \
+	$(PYTHON) -c "v='$$RUST_VER'.split('.'); exit(0 if int(v[0]) > 1 or (int(v[0]) == 1 and int(v[1]) >= 88) else 1)" || (echo "Error: Rust >= $(MIN_RUST_VERSION) is required. Found $$RUST_VER"; exit 1); \
+	echo "  [OK] Rust $$RUST_VER"
+	@# C++ Compiler check
+	@if command -v clang++ > /dev/null 2>&1; then \
+		CLANG_VER_FULL=$$(clang++ --version | head -n1 | grep -oE "[0-9]+\.[0-9]+\.[0-9]+" | head -n1); \
+		CLANG_VER=$$(echo $$CLANG_VER_FULL | cut -d. -f1); \
+		if [ $$CLANG_VER -lt $(MIN_CLANG_VERSION) ]; then echo "Error: Clang >= $(MIN_CLANG_VERSION) is required. Found $$CLANG_VER_FULL"; exit 1; fi; \
+		echo "  [OK] Clang $$CLANG_VER_FULL"; \
+	elif command -v g++ > /dev/null 2>&1; then \
+		GCC_VER_FULL=$$(g++ -dumpversion); \
+		GCC_VER=$$(echo $$GCC_VER_FULL | cut -d. -f1); \
+		if [ $$GCC_VER -lt $(MIN_GCC_VERSION) ]; then echo "Error: GCC >= $(MIN_GCC_VERSION) is required. Found $$GCC_VER_FULL"; exit 1; fi; \
+		echo "  [OK] GCC $$GCC_VER_FULL"; \
+	else \
+		echo "Error: C++ compiler (GCC or Clang) is required."; exit 1; \
+	fi
 
-# Install development dependencies
-dev:
-	uv sync --dev
+build: check-deps check-pip
+	@echo "Starting build process via setup.py..."
+	$(PYTHON) $(SETUP_PY) build_ext --inplace
+	@if command -v uv > /dev/null 2>&1 && uv pip --help > /dev/null 2>&1; then \
+		echo "  [OK] uv pip found, use uv pip to install..."; \
+		uv pip install -e .; \
+	else \
+		echo "  [OK] pip found, use pip to install..."; \
+		$(PYTHON) -m pip install -e .; \
+	fi
+	@echo "Build completed successfully."
 
-# Run tests
-test:
-	uv run pytest
-
-# Run linting tools
-lint:
-	uv run ruff check doris_mcp_server/
-	uv run mypy doris_mcp_server/
-
-# Format code
-format:
-	uv run ruff format doris_mcp_server/
-	uv run ruff check --fix doris_mcp_server/
-
-# Build the package
-build:
-	uv build
-
-# Clean build artifacts
 clean:
-	rm -rf build/
-	rm -rf dist/
-	rm -rf *.egg-info/
-	find . -type d -name __pycache__ -exec rm -rf {} +
-	find . -type d -name .pytest_cache -exec rm -rf {} +
-	find . -type d -name .mypy_cache -exec rm -rf {} +
-
-# Run all checks
-check: format lint test
-
-# Start server in stdio mode
-start-stdio:
-	uv run python -m doris_mcp_server.main --transport stdio
-
-# Start server in SSE mode
-start-sse:
-	uv run python -m doris_mcp_server.main --transport sse --host 0.0.0.0 --port 8080
-
-# Start server with custom database settings
-start-dev:
-	uv run python -m doris_mcp_server.main \
-		--transport stdio \
-		--db-host localhost \
-		--db-port 9030 \
-		--db-user root \
-		--log-level DEBUG
-
-# Run a single test file
-test-file:
-	uv run pytest $(FILE) -v
-
-# Install and run in one command
-run: install start-stdio
-
-# Development setup
-setup: dev
-	@echo "✅ Development environment is ready!"
-	@echo "Run 'make start-stdio' to start the server"
-
-# Add dependencies
-add:
-	uv add $(PACKAGE)
-
-# Add development dependencies
-add-dev:
-	uv add --dev $(PACKAGE)
-
-# Show dependency tree
-deps:
-	uv tree
-
-# Lock dependencies
-lock:
-	uv lock
-
-# Check for outdated dependencies
-outdated:
-	uv tree --outdated
-
-# Export requirements.txt
-export-requirements:
-	uv export --no-hashes > requirements.txt
-
-# Show UV version and info
-info:
-	uv --version
-	uv python list 
+	@echo "Cleaning up build artifacts..."
+	@for dir in $(CLEAN_DIRS); do \
+		if [ -d "$$dir" ] || [ -f "$$dir" ]; then \
+			echo "Removing $$dir"; \
+			rm -rf $$dir; \
+		fi \
+	done
+	@find . -name "*.pyc" -delete
+	@find . -name "__pycache__" -type d -exec rm -rf {} +
+	@echo "Cleanup completed."
