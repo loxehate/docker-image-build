@@ -58,6 +58,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 WORKDIR /app
 
 COPY --from=py-builder /app/.venv /app/.venv
+COPY --from=py-builder /app/openviking/console/static /app/.venv/lib/python3.13/site-packages/openviking/console/static
 ENV PATH="/app/.venv/bin:$PATH"
 ENV OPENVIKING_CONFIG_FILE="/app/ov.conf"
 ENV OPENVIKING_HOST="0.0.0.0"
