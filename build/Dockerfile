@@ -76,4 +76,4 @@ HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \
 # Default runs both server and console in one container.
 # Override command to run CLI, e.g.:
 # docker run --rm <image> -v "$HOME/.openviking/ovcli.conf:/root/.openviking/ovcli.conf" openviking --help
-CMD ["sh", "-c", "openviking-server & SERVER_PID=$!; python -m openviking.console.bootstrap --host 0.0.0.0 --port 8020 --openviking-url http://127.0.0.1:1933 & CONSOLE_PID=$!; trap 'kill $SERVER_PID $CONSOLE_PID 2>/dev/null || true' TERM INT; wait $SERVER_PID $CONSOLE_PID"]
+CMD ["sh", "-c", "openviking-server & SERVER_PID=$!; python -m openviking.console.bootstrap --host 0.0.0.0 --port 8020 --openviking-url http://127.0.0.1:1933 --write-enabled & CONSOLE_PID=$!; trap 'kill $SERVER_PID $CONSOLE_PID 2>/dev/null || true' TERM INT; wait $SERVER_PID $CONSOLE_PID"]
