@@ -46,7 +46,7 @@ COPY third_party/ third_party/
 # Install project and dependencies (triggers setup.py artifact builds + build_extension).
 RUN --mount=type=cache,target=/root/.cache/uv,id=uv-${TARGETPLATFORM} \
     uv sync --no-editable \
- && .venv/bin/pip install --no-cache-dir "mcp>=1.8.0"
+ && uv pip install --no-cache-dir "mcp>=1.8.0"
 
 # Stage 4: runtime
 FROM python:3.13-slim-trixie
