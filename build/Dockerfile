@@ -31,6 +31,8 @@ ENV UV_COMPILE_BYTECODE=1
 ENV UV_LINK_MODE=copy
 ENV UV_NO_DEV=1
 ENV UV_CONCURRENT_DOWNLOADS=16
+ENV UV_CONCURRENT_BUILDS=8
+ENV UV_CONCURRENT_INSTALLS=8
 WORKDIR /app
 
 # Copy source required for setup.py artifact builds and native extension build.
@@ -42,6 +44,7 @@ COPY openviking/ openviking/
 COPY openviking_cli/ openviking_cli/
 COPY src/ src/
 COPY third_party/ third_party/
+COPY examples/ examples/
 
 # Install project and dependencies (triggers setup.py artifact builds + build_extension).
 RUN --mount=type=cache,target=/root/.cache/uv,id=uv-${TARGETPLATFORM} \
