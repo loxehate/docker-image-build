@@ -46,6 +46,11 @@ COPY third_party/ third_party/
 RUN --mount=type=cache,target=/root/.cache/uv,id=uv-${TARGETPLATFORM} \
     uv sync --no-editable
 
+# Install MCP server dependency and copy MCP server entry script.
+RUN --mount=type=cache,target=/root/.cache/uv,id=uv-${TARGETPLATFORM} \
+    uv pip install --python /app/.venv/bin/python "mcp>=1.8.0"
+COPY examples/mcp-query/server.py /app/mcp-server.py
+
 # Stage 4: runtime
 FROM python:3.13-slim-trixie
 
@@ -58,7 +63,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 WORKDIR /app
 
 COPY --from=py-builder /app/.venv /app/.venv
-COPY --from=py-builder /app/openviking/console/static /app/.venv/lib/python3.13/site-packages/openviking/console/static
 ENV PATH="/app/.venv/bin:$PATH"
 ENV OPENVIKING_CONFIG_FILE="/app/ov.conf"
 ENV OPENVIKING_HOST="0.0.0.0"
@@ -66,14 +70,19 @@ ENV OPENVIKING_PORT="1933"
 ENV OPENVIKING_CONSOLE_HOST="0.0.0.0"
 ENV OPENVIKING_CONSOLE_PORT="8020"
 ENV OPENVIKING_CONSOLE_OPENVIKING_URL="http://127.0.0.1:1933"
+ENV OPENVIKING_MCP_HOST="0.0.0.0"
+ENV OPENVIKING_MCP_PORT="2033"
+ENV OPENVIKING_MCP_TRANSPORT="streamable-http"
+ENV OPENVIKING_MCP_DATA="/app/data"
 
 EXPOSE 1933
 EXPOSE 8020
+EXPOSE 2033
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \
     CMD curl -fsS http://127.0.0.1:1933/health || exit 1
 
-# Default runs both server and console in one container.
+# Default runs server, console, and MCP in one container.
 # Override command to run CLI, e.g.:
 # docker run --rm <image> -v "$HOME/.openviking/ovcli.conf:/root/.openviking/ovcli.conf" openviking --help
-CMD ["sh", "-c", "openviking-server & SERVER_PID=$!; python -m openviking.console.bootstrap --host 0.0.0.0 --port 8020 --openviking-url http://127.0.0.1:1933 --write-enabled & CONSOLE_PID=$!; trap 'kill $SERVER_PID $CONSOLE_PID 2>/dev/null || true' TERM INT; wait $SERVER_PID $CONSOLE_PID"]
+CMD ["sh", "-c", "openviking-server --host \"${OPENVIKING_HOST}\" --port \"${OPENVIKING_PORT}\" --config \"${OPENVIKING_CONFIG_FILE}\" & SERVER_PID=$!; openviking-console --host \"${OPENVIKING_CONSOLE_HOST}\" --port \"${OPENVIKING_CONSOLE_PORT}\" --openviking-url \"${OPENVIKING_CONSOLE_OPENVIKING_URL}\" & CONSOLE_PID=$!; python /app/mcp-server.py --config \"${OPENVIKING_CONFIG_FILE}\" --data \"${OPENVIKING_MCP_DATA}\" --host \"${OPENVIKING_MCP_HOST}\" --port \"${OPENVIKING_MCP_PORT}\" --transport \"${OPENVIKING_MCP_TRANSPORT}\" & MCP_PID=$!; trap 'kill $SERVER_PID $CONSOLE_PID $MCP_PID' TERM INT; wait -n $SERVER_PID $CONSOLE_PID $MCP_PID; EXIT_CODE=$?; kill $SERVER_PID $CONSOLE_PID $MCP_PID 2>/dev/null || true; wait $SERVER_PID $CONSOLE_PID $MCP_PID 2>/dev/null || true; exit $EXIT_CODE"]
