@@ -30,6 +30,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 ENV UV_COMPILE_BYTECODE=1
 ENV UV_LINK_MODE=copy
 ENV UV_NO_DEV=1
+ENV UV_CONCURRENT_DOWNLOADS=16
 WORKDIR /app
 
 # Copy source required for setup.py artifact builds and native extension build.
