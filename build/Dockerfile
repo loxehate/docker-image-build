@@ -47,11 +47,6 @@ RUN --mount=type=cache,target=/root/.cache/uv,id=uv-${TARGETPLATFORM} \
     uv sync --no-editable \
  && .venv/bin/pip install --no-cache-dir "mcp>=1.8.0"
 
-# Install MCP server dependency and copy MCP server entry script.
-RUN --mount=type=cache,target=/root/.cache/uv,id=uv-${TARGETPLATFORM} \
-    uv pip install --python /app/.venv/bin/python "mcp>=1.8.0"
-COPY examples/mcp-query/server.py /app/mcp-server.py
-
 # Stage 4: runtime
 FROM python:3.13-slim-trixie
 
@@ -70,6 +65,7 @@ COPY --from=py-builder /app/openviking/console/static /app/.venv/lib/python3.13/
 # MCP query example runtime files.
 COPY --from=py-builder /app/examples/mcp-query /app/examples/mcp-query
 COPY --from=py-builder /app/examples/common /app/examples/common
+
 ENV PATH="/app/.venv/bin:$PATH"
 ENV OPENVIKING_CONFIG_FILE="/app/ov.conf"
 ENV OPENVIKING_HOST="0.0.0.0"
@@ -78,7 +74,7 @@ ENV OPENVIKING_CONSOLE_HOST="0.0.0.0"
 ENV OPENVIKING_CONSOLE_PORT="8020"
 ENV OPENVIKING_CONSOLE_OPENVIKING_URL="http://127.0.0.1:1933"
 
-ENV OPENVIKING_ENABLE_MCP="0"
+ENV OPENVIKING_ENABLE_MCP="1"
 ENV OPENVIKING_MCP_COMMAND="python /app/examples/mcp-query/server.py --config /app/ov.conf --data /app/data --host 0.0.0.0 --port 2033 --transport streamable-http"
 ENV OPENVIKING_MCP_HOST="0.0.0.0"
 ENV OPENVIKING_MCP_PORT="2033"
