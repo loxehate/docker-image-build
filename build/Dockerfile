@@ -83,7 +83,7 @@ ENV OPENVIKING_MCP_COMMAND="python /app/examples/mcp-query/server.py --config /a
 ENV OPENVIKING_MCP_HOST="0.0.0.0"
 ENV OPENVIKING_MCP_PORT="2033"
 ENV OPENVIKING_MCP_TRANSPORT="streamable-http"
-ENV OPENVIKING_MCP_DATA="/app/data"
+ENV OPENVIKING_MCP_DATA="/app/mcp-data"
 
 
 EXPOSE 1933
