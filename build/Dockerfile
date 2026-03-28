@@ -30,9 +30,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 ENV UV_COMPILE_BYTECODE=1
 ENV UV_LINK_MODE=copy
 ENV UV_NO_DEV=1
-ENV UV_CONCURRENT_DOWNLOADS=16
-ENV UV_CONCURRENT_BUILDS=8
-ENV UV_CONCURRENT_INSTALLS=8
 WORKDIR /app
 
 # Copy source required for setup.py artifact builds and native extension build.
@@ -44,12 +41,12 @@ COPY openviking/ openviking/
 COPY openviking_cli/ openviking_cli/
 COPY src/ src/
 COPY third_party/ third_party/
-COPY examples/ examples/
 
 # Install project and dependencies (triggers setup.py artifact builds + build_extension).
+# --locked ensures the lockfile is used and is consistent with pyproject.toml,
+# preventing silent re-resolution that could pull unexpected package versions.
 RUN --mount=type=cache,target=/root/.cache/uv,id=uv-${TARGETPLATFORM} \
-    uv sync --no-editable \
- && uv pip install --no-cache-dir "mcp>=1.8.0"
+    uv sync --locked --no-editable
 
 # Stage 4: runtime
 FROM python:3.13-slim-trixie
@@ -63,38 +60,20 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 WORKDIR /app
 
 COPY --from=py-builder /app/.venv /app/.venv
-# Ensure console frontend static assets are present in runtime site-packages.
-# Some wheel/install flows may miss package_data in minimal images.
 COPY --from=py-builder /app/openviking/console/static /app/.venv/lib/python3.13/site-packages/openviking/console/static
-# MCP query example runtime files.
-COPY --from=py-builder /app/examples/mcp-query /app/examples/mcp-query
-COPY --from=py-builder /app/examples/common /app/examples/common
 
 ENV PATH="/app/.venv/bin:$PATH"
 ENV OPENVIKING_CONFIG_FILE="/app/ov.conf"
-ENV OPENVIKING_HOST="0.0.0.0"
-ENV OPENVIKING_PORT="1933"
 ENV OPENVIKING_CONSOLE_HOST="0.0.0.0"
 ENV OPENVIKING_CONSOLE_PORT="8020"
 ENV OPENVIKING_CONSOLE_OPENVIKING_URL="http://127.0.0.1:1933"
 
-ENV OPENVIKING_ENABLE_MCP="1"
-ENV OPENVIKING_MCP_COMMAND="python /app/examples/mcp-query/server.py --config /app/ov.conf --data /app/data --host 0.0.0.0 --port 2033 --transport streamable-http"
-ENV OPENVIKING_MCP_HOST="0.0.0.0"
-ENV OPENVIKING_MCP_PORT="2033"
-ENV OPENVIKING_MCP_TRANSPORT="streamable-http"
-ENV OPENVIKING_MCP_DATA="/app/mcp-data"
-
-
 EXPOSE 1933
-EXPOSE 8020
-EXPOSE 2033
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \
     CMD curl -fsS http://127.0.0.1:1933/health || exit 1
 
-
-# Default runs server, console, and MCP in one container.
-# Override command to run CLI, e.g.:
+# Default runs server; override command to run CLI, e.g.:
 # docker run --rm <image> -v "$HOME/.openviking/ovcli.conf:/root/.openviking/ovcli.conf" openviking --help
-CMD ["sh", "-c", "openviking-server & SERVER_PID=$!; python -m openviking.console.bootstrap --host 0.0.0.0 --port 8020 --openviking-url http://127.0.0.1:1933 --write-enabled & CONSOLE_PID=$!; MCP_PID=''; if [ \"${OPENVIKING_ENABLE_MCP}\" = '1' ] && [ -n \"${OPENVIKING_MCP_COMMAND}\" ]; then sh -c \"${OPENVIKING_MCP_COMMAND}\" & MCP_PID=$!; fi; trap 'kill $SERVER_PID $CONSOLE_PID ${MCP_PID:-} 2>/dev/null || true' TERM INT; wait $SERVER_PID $CONSOLE_PID ${MCP_PID:-}"]
+#CMD ["openviking-server"]
+CMD ["sh", "-c", "openviking-server & SERVER_PID=$!; python -m openviking.console.bootstrap --host 0.0.0.0 --port 8020 --openviking-url http://127.0.0.1:1933 & CONSOLE_PID=$!; trap 'kill $SERVER_PID $CONSOLE_PID 2>/dev/null || true' TERM INT; wait $SERVER_PID $CONSOLE_PID"]
