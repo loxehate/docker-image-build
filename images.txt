@@ -1,1 +1,1 @@
-openviking:v6
+openviking:v7
