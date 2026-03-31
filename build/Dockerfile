@@ -19,6 +19,7 @@ ENV RUSTUP_HOME=/usr/local/rustup
 ENV PATH="/usr/local/cargo/bin:/usr/local/go/bin:${PATH}"
 ARG OPENVIKING_VERSION=0.0.0
 ARG TARGETPLATFORM
+ARG UV_LOCK_STRATEGY=auto
 ENV SETUPTOOLS_SCM_PRETEND_VERSION_FOR_OPENVIKING=${OPENVIKING_VERSION}
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -43,10 +44,25 @@ COPY src/ src/
 COPY third_party/ third_party/
 
 # Install project and dependencies (triggers setup.py artifact builds + build_extension).
-# --locked ensures the lockfile is used and is consistent with pyproject.toml,
-# preventing silent re-resolution that could pull unexpected package versions.
+# Default to auto-refreshing uv.lock inside the ephemeral build context when it is
+# stale, so Docker builds stay unblocked after dependency changes. Set
+# UV_LOCK_STRATEGY=locked to keep fail-fast reproducibility checks.
 RUN --mount=type=cache,target=/root/.cache/uv,id=uv-${TARGETPLATFORM} \
-    uv sync --locked --no-editable
+    case "${UV_LOCK_STRATEGY}" in \
+        locked) \
+            uv sync --locked --no-editable \
+            ;; \
+        auto) \
+            if ! uv lock --check; then \
+                uv lock; \
+            fi; \
+            uv sync --locked --no-editable \
+            ;; \
+        *) \
+            echo "Unsupported UV_LOCK_STRATEGY: ${UV_LOCK_STRATEGY}" >&2; \
+            exit 2 \
+            ;; \
+    esac
 
 # Stage 4: runtime
 FROM python:3.13-slim-trixie
@@ -61,13 +77,13 @@ WORKDIR /app
 
 COPY --from=py-builder /app/.venv /app/.venv
 COPY --from=py-builder /app/openviking/console/static /app/.venv/lib/python3.13/site-packages/openviking/console/static
-
 ENV PATH="/app/.venv/bin:$PATH"
 ENV OPENVIKING_CONFIG_FILE="/app/ov.conf"
 ENV OPENVIKING_CONSOLE_HOST="0.0.0.0"
 ENV OPENVIKING_CONSOLE_PORT="8020"
 ENV OPENVIKING_CONSOLE_OPENVIKING_URL="http://127.0.0.1:1933"
 
+EXPOSE 8020
 EXPOSE 1933
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \
@@ -75,5 +91,4 @@ HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \
 
 # Default runs server; override command to run CLI, e.g.:
 # docker run --rm <image> -v "$HOME/.openviking/ovcli.conf:/root/.openviking/ovcli.conf" openviking --help
-#CMD ["openviking-server"]
 CMD ["sh", "-c", "openviking-server & SERVER_PID=$!; python -m openviking.console.bootstrap --host 0.0.0.0 --port 8020 --openviking-url http://127.0.0.1:1933 --write-enabled & CONSOLE_PID=$!; trap 'kill $SERVER_PID $CONSOLE_PID 2>/dev/null || true' TERM INT; wait $SERVER_PID $CONSOLE_PID"]
