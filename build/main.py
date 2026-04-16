@@ -14,7 +14,7 @@ app = FastAPI()
 # ---------------------------------------------------------
 # 1. 模型加载优化：开启 CUDA 显存管理
 # ---------------------------------------------------------
-os.environ["CUDA_VISIBLE_DEVICES"] = "1"
+# os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 
 
 def get_session():
