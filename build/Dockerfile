@@ -1,94 +1,37 @@
-# syntax=docker/dockerfile:1.9
+FROM nvidia/cuda:11.8.0-cudnn8-runtime-ubuntu22.04
 
-# Stage 1: provide Go toolchain (required by setup.py -> build_agfs_artifacts -> make build)
-FROM golang:1.26-trixie AS go-toolchain
+ENV DEBIAN_FRONTEND=noninteractive
+WORKDIR /opinion_ocr
 
-# Stage 2: provide Rust toolchain (required by setup.py -> build_ov_cli_artifact -> cargo build)
-FROM rust:1.88-trixie AS rust-toolchain
-
-# Stage 3: build Python environment with uv (builds AGFS + Rust CLI + C++ extension from source)
-FROM ghcr.io/astral-sh/uv:python3.13-trixie-slim AS py-builder
-
-# Reuse Go toolchain from stage 1 so setup.py can compile agfs-server in-place.
-COPY --from=go-toolchain /usr/local/go /usr/local/go
-# Reuse Rust toolchain from stage 2 so setup.py can compile ov CLI in-place.
-COPY --from=rust-toolchain /usr/local/cargo /usr/local/cargo
-COPY --from=rust-toolchain /usr/local/rustup /usr/local/rustup
-ENV CARGO_HOME=/usr/local/cargo
-ENV RUSTUP_HOME=/usr/local/rustup
-ENV PATH="/usr/local/cargo/bin:/usr/local/go/bin:${PATH}"
-ARG OPENVIKING_VERSION=0.0.0
-ARG TARGETPLATFORM
-ARG UV_LOCK_STRATEGY=auto
-ENV SETUPTOOLS_SCM_PRETEND_VERSION_FOR_OPENVIKING=${OPENVIKING_VERSION}
-
+# 安装基础库
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential \
-    cmake \
-    git \
- && rm -rf /var/lib/apt/lists/*
+    python3.10 python3-pip libglib2.0-0 libgl1-mesa-glx \
+    ffmpeg libavcodec-dev libavformat-dev libswscale-dev \
+    && rm -rf /var/lib/apt/lists/*
 
-ENV UV_COMPILE_BYTECODE=1
-ENV UV_LINK_MODE=copy
-ENV UV_NO_DEV=1
-WORKDIR /app
+RUN ln -s /usr/bin/python3 /usr/bin/python
 
-# Copy source required for setup.py artifact builds and native extension build.
-COPY Cargo.toml Cargo.lock ./
-COPY pyproject.toml uv.lock setup.py README.md ./
-COPY build_support/ build_support/
-COPY crates/ crates/
-COPY openviking/ openviking/
-COPY openviking_cli/ openviking_cli/
-COPY src/ src/
-COPY third_party/ third_party/
+COPY . .
 
-# Install project and dependencies (triggers setup.py artifact builds + build_extension).
-# Default to auto-refreshing uv.lock inside the ephemeral build context when it is
-# stale, so Docker builds stay unblocked after dependency changes. Set
-# UV_LOCK_STRATEGY=locked to keep fail-fast reproducibility checks.
-RUN --mount=type=cache,target=/root/.cache/uv,id=uv-${TARGETPLATFORM} \
-    case "${UV_LOCK_STRATEGY}" in \
-        locked) \
-            uv sync --locked --no-editable \
-            ;; \
-        auto) \
-            if ! uv lock --check; then \
-                uv lock; \
-            fi; \
-            uv sync --locked --no-editable \
-            ;; \
-        *) \
-            echo "Unsupported UV_LOCK_STRATEGY: ${UV_LOCK_STRATEGY}" >&2; \
-            exit 2 \
-            ;; \
-    esac
+# 1. 安装特定的 NVIDIA Python 运行库
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir \
+    fastapi uvicorn python-multipart \
+    onnxruntime-gpu==1.18.0 \
+    openai httpx \
+    python-logstash \
+    # 这两个包包含了你缺失的 .so.11 文件
+    nvidia-cublas-cu11 \
+    nvidia-cudnn-cu11 \
+    opencv-python-headless \
+    numpy==1.26.4
 
-# Stage 4: runtime
-FROM python:3.13-slim-trixie
+# 2. 关键核心：将 pip 安装的库路径强制映射到 ld.so.conf
+# 这样系统在启动时就会去 python 的 site-packages 里找 .so 文件
+RUN echo "/usr/local/lib/python3.10/dist-packages/nvidia/cublas/lib" > /etc/ld.so.conf.d/nvidia-cublas.conf && \
+    echo "/usr/local/lib/python3.10/dist-packages/nvidia/cudnn/lib" > /etc/ld.so.conf.d/nvidia-cudnn.conf && \
+    ldconfig
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    ca-certificates \
-    curl \
-    libstdc++6 \
- && rm -rf /var/lib/apt/lists/*
+EXPOSE 8082
 
-WORKDIR /app
-
-COPY --from=py-builder /app/.venv /app/.venv
-COPY --from=py-builder /app/openviking/console/static /app/.venv/lib/python3.13/site-packages/openviking/console/static
-ENV PATH="/app/.venv/bin:$PATH"
-ENV OPENVIKING_CONFIG_FILE="/app/ov.conf"
-ENV OPENVIKING_CONSOLE_HOST="0.0.0.0"
-ENV OPENVIKING_CONSOLE_PORT="8020"
-ENV OPENVIKING_CONSOLE_OPENVIKING_URL="http://127.0.0.1:1933"
-
-EXPOSE 8020
-EXPOSE 1933
-
-HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \
-    CMD curl -fsS http://127.0.0.1:1933/health || exit 1
-
-# Default runs server; override command to run CLI, e.g.:
-# docker run --rm <image> -v "$HOME/.openviking/ovcli.conf:/root/.openviking/ovcli.conf" openviking --help
-CMD ["sh", "-c", "openviking-server & SERVER_PID=$!; python -m openviking.console.bootstrap --host 0.0.0.0 --port 8020 --openviking-url http://127.0.0.1:1933 --write-enabled & CONSOLE_PID=$!; trap 'kill $SERVER_PID $CONSOLE_PID 2>/dev/null || true' TERM INT; wait $SERVER_PID $CONSOLE_PID"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8082"]
