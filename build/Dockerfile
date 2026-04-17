@@ -11,11 +11,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 RUN ln -s /usr/bin/python3 /usr/bin/python
 
-COPY . .
 
 # 1. 安装特定的 NVIDIA Python 运行库
-RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir \
+RUN pip install -i https://mirrors.aliyun.com/pypi/simple/ --no-cache-dir --upgrade pip && \
+    pip install -i https://mirrors.aliyun.com/pypi/simple/ --no-cache-dir \
     fastapi uvicorn python-multipart \
     onnxruntime-gpu==1.18.0 \
     openai httpx \
@@ -31,6 +30,7 @@ RUN pip install --no-cache-dir --upgrade pip && \
 RUN echo "/usr/local/lib/python3.10/dist-packages/nvidia/cublas/lib" > /etc/ld.so.conf.d/nvidia-cublas.conf && \
     echo "/usr/local/lib/python3.10/dist-packages/nvidia/cudnn/lib" > /etc/ld.so.conf.d/nvidia-cudnn.conf && \
     ldconfig
+COPY . .
 
 EXPOSE 8082
 

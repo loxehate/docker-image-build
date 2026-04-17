@@ -6,6 +6,7 @@ import numpy as np
 import base64
 import httpx  # 使用 httpx 替代默认的 openai 同步调用
 import os
+from resource.appSource import config
 from logstash_utils import Logger
 logger = Logger(__name__)
 
@@ -14,7 +15,7 @@ app = FastAPI()
 # ---------------------------------------------------------
 # 1. 模型加载优化：开启 CUDA 显存管理
 # ---------------------------------------------------------
-os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+os.environ["CUDA_VISIBLE_DEVICES"] = config.get_profile_config("cuda_device")
 
 
 def get_session():
@@ -33,7 +34,7 @@ def get_session():
     try:
         # 优先使用 CUDA，失败则回退 CPU
         sess = ort.InferenceSession(
-            "east_model.onnx",
+            config.get_profile_config("classfication_model"),
             sess_options=options,
             providers=[("CUDAExecutionProvider", cuda_options), "CPUExecutionProvider"]
         )
@@ -54,14 +55,14 @@ import openai
 
 async_client = openai.AsyncOpenAI(
     api_key="null",
-    base_url="http://192.168.1.193:8118/v1"
+    base_url=config.get_profile_config("server_api")
 )
 
 
 async def response_paddleocrvl_async(image_b64, filename):
     try:
         response = await async_client.chat.completions.create(
-            model="PaddleOCR-VL-1.5-0.9B",
+            model=config.get_profile_config("paddle_model"),
             messages=[{
                 'role': 'user',
                 'content': [
@@ -70,7 +71,7 @@ async def response_paddleocrvl_async(image_b64, filename):
                 ]
             }],
             temperature=0,
-            max_tokens=512,
+            max_tokens=int(config.get_profile_config("paddleocrvl_max_tokens")),
             frequency_penalty=0.1,
             top_p=0.9,
             stop=['根据图像内容', '请提供源文件图像', '根据图片内容', '根据图片中的文字', '识别后', '识别结果', '识别文字后'],
@@ -120,7 +121,7 @@ async def detect_text(file: UploadFile = File(...)):
         # has_text = np.any(score_map > 0.5)  # 只要存在高置信度区域即判定为有文字
         text_pixel_count = int(np.count_nonzero(score_map > 0.5))
 
-        has_text = text_pixel_count > 50
+        has_text = text_pixel_count > int(config.get_profile_config("classfication_threshold"))
 
         latency_ms = (time.perf_counter() - start_time) * 1000
         # logger.info(f"EAST 推理耗时: {latency_ms:.2f}ms, 是否有文字: {has_text}")
@@ -140,4 +141,4 @@ if __name__ == "__main__":
     import uvicorn
 
     # 注意：使用 GPU 推理时，workers 建议设为 1，利用异步处理并发
-    uvicorn.run(app, host="0.0.0.0", port=8082, workers=1)
+    uvicorn.run(app, host="0.0.0.0", port=int(config.get_profile_config("server_port")), workers=1)

@@ -4,7 +4,7 @@ import logging
 
 import logstash
 
-
+from resource.appSource import config
 
 LogDict = {'INFO': logging.INFO}
 
@@ -13,12 +13,11 @@ class LogstashConstants:
     """logstash涉及常量"""
 
     def __init__(self):
-        self.host = "node01.public.logstash.prod"
-        self.port = 8888
-        self.level ="INFO"
-        self.tag = "python-log"
-        self.program = "opinion_ocr"
-
+        self.host = config.get_profile_config('logstash.host')
+        self.port = int(config.get_profile_config('logstash.port'))
+        self.level = config.get_profile_config('logstash.level')
+        self.tag = config.get_profile_config('logstash.tag')
+        self.program = config.get_profile_config('logstash.program')
 
 
 log = LogstashConstants()
