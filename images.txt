@@ -1,1 +1,1 @@
-opinion_ocr:v2
+slides-to-images:v1

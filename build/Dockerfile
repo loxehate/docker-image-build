@@ -1,37 +1,26 @@
-FROM nvidia/cuda:11.8.0-cudnn8-runtime-ubuntu22.04
+# syntax=docker/dockerfile:1
 
-ENV DEBIAN_FRONTEND=noninteractive
-WORKDIR /opinion_ocr
+FROM docker:29-cli AS docker_cli
+FROM ghcr.io/astral-sh/uv:0.13.5 AS uv_binary
 
-# 安装基础库
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    python3.10 python3-pip libglib2.0-0 libgl1-mesa-glx \
-    ffmpeg libavcodec-dev libavformat-dev libswscale-dev \
-    && rm -rf /var/lib/apt/lists/*
+FROM python:3.13-slim-trixie
 
-RUN ln -s /usr/bin/python3 /usr/bin/python
+COPY --from=uv_binary /uv /uvx /bin/
+COPY --from=docker_cli /usr/local/bin/docker /usr/bin/docker
 
+WORKDIR /app
 
-# 1. 安装特定的 NVIDIA Python 运行库
-RUN pip install -i https://mirrors.aliyun.com/pypi/simple/ --no-cache-dir --upgrade pip && \
-    pip install -i https://mirrors.aliyun.com/pypi/simple/ --no-cache-dir \
-    fastapi uvicorn python-multipart \
-    onnxruntime-gpu==1.18.0 \
-    openai httpx \
-    python-logstash \
-    # 这两个包包含了你缺失的 .so.11 文件
-    nvidia-cublas-cu11 \
-    nvidia-cudnn-cu11 \
-    opencv-python-headless \
-    numpy==1.26.4
+ENV UV_NO_DEV=1 \
+    UV_COMPILE_BYTECODE=1 \
+    UV_LINK_MODE=copy \
+    PATH="/app/.venv/bin:${PATH}"
 
-# 2. 关键核心：将 pip 安装的库路径强制映射到 ld.so.conf
-# 这样系统在启动时就会去 python 的 site-packages 里找 .so 文件
-RUN echo "/usr/local/lib/python3.10/dist-packages/nvidia/cublas/lib" > /etc/ld.so.conf.d/nvidia-cublas.conf && \
-    echo "/usr/local/lib/python3.10/dist-packages/nvidia/cudnn/lib" > /etc/ld.so.conf.d/nvidia-cudnn.conf && \
-    ldconfig
-COPY . .
+COPY pyproject.toml uv.lock README.md LICENSE ./
+RUN uv sync --locked --no-install-project
 
-EXPOSE 8082
+COPY src ./src
+COPY run.py ./
+RUN uv sync --locked
 
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8082"]
+ENTRYPOINT ["/app/.venv/bin/python", "/app/run.py"]
+CMD ["--help"]
