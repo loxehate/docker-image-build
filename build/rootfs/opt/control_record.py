@@ -21,7 +21,7 @@ CONNECT_TIMEOUT_S = 30
 CONNECT_RETRY_INTERVAL_S = 0.5
 SLIDESHOW_READY_TIMEOUT_S = 15
 SLIDESHOW_READY_RETRY_INTERVAL_S = 0.05
-SLIDESHOW_RENDER_SETTLE_S = float(os.environ.get("SLIDESHOW_RENDER_SETTLE_S", "0.3"))
+SLIDESHOW_RENDER_SETTLE_S = float(os.environ.get("SLIDESHOW_RENDER_SETTLE_S", "1.0"))
 
 LEAD_IN_S = float(os.environ.get("LEAD_IN_S", "0.3"))  # full-screen first slide held while ffmpeg starts, before animations resume
 
@@ -161,6 +161,7 @@ def main() -> int:
     load_props = (make_prop("Hidden", False),)
     doc = desktop.loadComponentFromURL(file_url, "_blank", 0, load_props)
     _ = result["steps"].append("loaded")
+    editor_window = doc.getCurrentController().getFrame().getContainerWindow()
 
     # Disable per-slide auto-advance BEFORE starting the show, so manual driving is the sole advance
     # mechanism and nothing races an advTm timer into overshoot — see IMPRESS_PROTOCOL.md §6.
@@ -192,6 +193,11 @@ def main() -> int:
                 raise RuntimeError("presentation never produced a running slideshow controller")
             time.sleep(SLIDESHOW_READY_RETRY_INTERVAL_S)
         _ = result["steps"].append("presentation running and paused")
+
+        # The slideshow has its own window. Remove the document editor from X11 before
+        # recording so delayed focus/mapping cannot leak its toolbars into the video.
+        editor_window.setVisible(False)
+        _ = result["steps"].append("editor window hidden")
 
         controller.AlwaysOnTop = True
         controller.activate()

@@ -80,7 +80,8 @@ reconstruct after the fact.
   driver of slide progression — nothing races a slide's own timer into an
   overshoot.
 - **Recording starts only after the full-screen slideshow is ready.** The
-  controller is paused immediately, activated, and checked for running,
-  active, full-screen first-slide state before `ffmpeg` starts, preventing
-  the visible Impress editor window from leaking into the beginning of the
-  recording.
+  controller is paused immediately, the separate document-editor window is
+  hidden, and the slideshow is activated and checked for running, active,
+  full-screen first-slide state before `ffmpeg` starts. A one-second
+  pre-record paint settle prevents the editor or an incomplete window switch
+  from leaking into the recording.
