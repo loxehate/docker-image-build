@@ -1,111 +1,86 @@
-# slides-to-images
+# docker-libreoffice-impress
 
-[![pipeline status](https://gitlab.com/riphixel/slides-to-images/badges/main/pipeline.svg)](https://gitlab.com/riphixel/slides-to-images/-/commits/main)
-[![coverage report](https://gitlab.com/riphixel/slides-to-images/badges/main/coverage.svg)](https://gitlab.com/riphixel/slides-to-images/-/commits/main)
-[![Latest Release](https://gitlab.com/riphixel/slides-to-images/-/badges/release.svg)](https://gitlab.com/riphixel/slides-to-images/-/releases)
+A Docker image that runs LibreOffice Impress under a virtual display and
+exposes it for programmatic control via UNO, so a slideshow's animations can
+be played back and recorded to video. It's not a headless converter image:
+`soffice` runs in real GUI mode against an Xvfb display (via
+[`jlesage/baseimage-gui`](https://github.com/jlesage/docker-baseimage-gui))
+so a presentation can actually be started, driven click-by-click, and
+captured on screen.
 
+This repo is a spinoff of the `docker-libreoffice-impress/` image originally
+developed inside
+[riphixel/slides-to-images](https://gitlab.com/riphixel/slides-to-images),
+extracted so it can be built and versioned independently of that project.
 
-A library that converts a PowerPoint deck into an animation-playback video
-plus per-slide static frames — for embedding in another codebase, not for
-running standalone. Two independent capabilities:
+## What's here
 
-- **Timing analysis** (`build_recording_plan`, `compute_deck_timeline`) —
-  pure Python, parses the deck's OOXML `<p:timing>`/`<p:transition>` trees
-  to compute per-slide/per-click pacing. No external dependencies. See
-  `TIMING.md` for the full model.
-- **Conversion** (`convert`) — drives a real, disposable LibreOffice Impress
-  instance (via the `docker-libreoffice-impress` container image) to
-  actually play the deck, recording video throughout and taking a live
-  screenshot the moment each click settles. See `IMPRESS_PROTOCOL.md` for
-  how that's driven end to end.
+- **`Dockerfile`** — builds on `jlesage/baseimage-gui` (Alpine), installing
+  the full LibreOffice suite, fonts, and the tools needed to record and
+  post-process a slideshow (`ffmpeg`, `imagemagick`).
+- **`rootfs/startapp.sh`** — the entrypoint the base image execs once its
+  Xvfb/supervision setup is ready. Starts `soffice` in GUI (non-headless)
+  mode with a UNO listener on port 2002.
+- **`rootfs/opt/control_record.py`** — baked into the image, this is the
+  in-container driver: it connects to the UNO socket, opens a `.pptx`, steps
+  through a JSON recording plan (per-slide click gaps and hold times) while
+  `ffmpeg` captures the X11 display to an `.mp4`. It also takes a live
+  ImageMagick screenshot (`import -window root`) right after each click
+  settles — ground truth for "what does this click look like once it's
+  settled", rather than a guess at a timestamp in the recorded video.
 
-## Install
-
-```sh
-pip install slides-to-images
-```
-
-The PyPI distribution name and the importable package name differ:
-`pip install slides-to-images`, but `import slides2images`.
-
-For local development from a source checkout instead: `pip install -e .`
-(or `.[test]`/`.[dev]` — see `pyproject.toml`).
-
-`convert()` additionally needs a reachable Docker daemon, with the image
-pulled: `docker pull registry.gitlab.com/riphixel/docker-libreoffice-impress:latest`.
-Set `SLIDES2IMAGES_IMPRESS_IMAGE` to use a locally built or pinned variant
-instead of the default image.
-
-## Usage
-
-### Timing analysis only (no Docker required)
-
-```python
-from pathlib import Path
-from slides2images import build_recording_plan
-
-plan = build_recording_plan(Path("deck.pptx"), click_delay_ms=500)
-for slide in plan:
-    print(
-        f"slide {slide['index']}: "
-        f"{len(slide['click_gaps_ms'])} click(s), "
-        f"holds {slide['post_click_hold_ms']}ms after the last one"
-    )
-```
-
-`compute_deck_timeline()` returns the same data uncollapsed — every
-animation node's start/end/duration, trigger, and target shape — useful for
-debugging a deck's timing rather than just driving a recorder with it.
-
-### Full conversion to video + static frames
-
-```python
-from pathlib import Path
-from slides2images import convert
-
-result = convert(Path("deck.pptx"), Path("out/"), width=1920, height=1080)
-
-print(result.video_path)  # out/recording.mp4
-for image_path in result.image_paths:  # out/images/frame-0-0.png, frame-0-1.png, frame-1-0.png, ...
-    print(image_path)
-```
-
-`convert()` raises `slides2images.RecordingError` for anything that stops a
-conversion short — an unsupported file extension, a deck with zero slides,
-or a failure in the underlying Docker/LibreOffice pipeline.
-
-`run.py` in the repo root is this same example as a working CLI:
+## Building
 
 ```sh
-python3 run.py deck.pptx   # writes deck/recording.mp4 + deck/images/*.png
+docker build -t slides2images-libreoffice-impress:latest .
 ```
 
-## Supported input files
+## Running `control_record.py`
 
-`SUPPORTED_EXTENSIONS` (also enforced by `convert()`):
+The script is invoked inside the running container (e.g. via `docker exec`),
+against a `.pptx` and a plan file already present in the container:
 
-- Office Open XML Presentations and Templates — `.pptx`, `.ppsx`, `.ppmx`,
-  `.potx`, `.pomx` (both strict and transitional OpenXML).
-- Legacy Microsoft PowerPoint 97/2000/XP/2003 — `.ppt`, `.pps`, `.ppm`,
-  `.pot`, `.pom`. Converted to `.pptx` internally before anything else runs
-  (`python-pptx`, which the timing model uses, only reliably opens the
-  modern OOXML zip structure).
+```sh
+python3 /opt/control_record.py \
+    --pptx /path/to/deck.pptx \
+    --plan /path/to/plan.json \
+    --output /path/to/output.mp4 \
+    --frames-dir /path/to/frames
+```
 
-`RESOLUTIONS` is a small convenience dict of common `(width, height)` pairs
-(`"vga"`, `"720p"`, `"hd"`, `"4k"`) if you'd rather not hardcode pixels.
+`plan.json` is a list of per-slide entries:
 
-## See also
+```json
+[{"index": 0, "click_gaps_ms": [500, 500], "post_click_hold_ms": 1000}]
+```
 
-- `TIMING.md` — how animation and transition timing is computed, including
-  the corner cases found by validating against real PowerPoint-rendered
-  reference videos.
-- `IMPRESS_PROTOCOL.md` — how `convert()` actually drives a live Impress
-  instance end to end: UNO connection, auto-advance disabling, the
-  per-slide control loop, container lifecycle.
-- `features.md` — end-user-visible feature list.
-- `AGENTS.md` — guidelines for working on this codebase.
+`--frames-dir` is created if it doesn't exist, and gets one
+`frame-{slide_index}-{capture_index}.png` per settled click —
+`capture_index` reset to 0 at the start of each slide, one entry per
+`click_gaps_ms` value, plus one frame (`capture_index` 0) for a slide with
+none at all, at the end of its hold — the same frame count and ordering
+`slides2images`'s old video-based `extract_static_frames()` used to
+reconstruct after the fact.
 
-## Links
+## Notes
 
-- PyPI: <https://pypi.org/project/slides-to-images/>
-- Source, issues: <https://gitlab.com/riphixel/slides-to-images>
+- **`libreoffice-impress` + `libreoffice-common` alone is broken on
+  Alpine** — aborts with an uncaught `com::sun::star::uno::RuntimeException`
+  even on a bare `soffice --version`, no Xvfb or document involved. The full
+  `libreoffice` meta-package (pulls in writer/calc/draw/math/base) fixes it;
+  root cause not fully bisected, likely the shared component registry
+  (`main.xcd`) referencing services from modules that aren't installed.
+- **No pyuno bridge gymnastics needed.** `libreoffice-common` installs
+  `uno`/`unohelper` straight into system Python's site-packages — plain
+  `python3 -c "import uno"` works with no `PYTHONPATH`/`LD_LIBRARY_PATH`
+  juggling, as long as the calling script runs *inside* the container (via
+  `docker exec`, not from an external process).
+- **Auto-advance is disabled before the presentation starts** (each draw
+  page's `Change` property is set to `0`), so `control_record.py` is the sole
+  driver of slide progression — nothing races a slide's own timer into an
+  overshoot.
+- **Recording starts only after the full-screen slideshow is ready.** The
+  controller is paused immediately, activated, and checked for running,
+  active, full-screen first-slide state before `ffmpeg` starts, preventing
+  the visible Impress editor window from leaking into the beginning of the
+  recording.
