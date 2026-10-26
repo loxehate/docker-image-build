@@ -1,1 +1,26 @@
-.gitlab-ci-local/
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+*.egg-info/
+/build/
+/dist/
+
+# Virtual environments
+.venv/
+venv/
+
+# Generated test output (regeneratable via test01.py / pytest)
+tests/fixtures/output/
+
+# Claude Code local settings (per-developer, not shared)
+.claude/settings.local.json
+
+# gitlab-ci-local's own working directory + report artifacts it (and real CI)
+# generate — regeneratable, not source.
+/.gitlab-ci-local/
+/reports/
+
+# Unrelated content sitting in the repo root (not produced by this
+# project's pipeline — see git history / ask before removing)
+/output/

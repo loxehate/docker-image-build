@@ -1,12 +1,45 @@
+variables:
+  TRIVY_SERVER: "https://trivy.lab.gronlier.fr"
+  UV_PYTHON_DOWNLOADS: never  # prevent uv from fetching a newer Python version
+  UV_NO_SYNC: "1"
+  # # Injected into every job's git config before checkout even happens (GitLab's own
+  # # mechanism for this, not something a job's before_script can retroactively fix once
+  # # e.g. GitLab's cache-restore step has already touched a tracked file's permission bits).
+  # # Without this, whichever job runs first ends up computing (and caching, since every
+  # # job in this pipeline shares one cache key) a spuriously "dirty" versioningit version
+  # # for an exact, unmodified tag checkout -- which every later job, including py-publish,
+  # # then inherits from the shared cache instead of recomputing.
+  # GIT_CONFIG_COUNT: "1"
+  # GIT_CONFIG_KEY_0: core.fileMode
+  # GIT_CONFIG_VALUE_0: "false"
+
 include:
   - component: $CI_SERVER_FQDN/to-be-continuous/semantic-release/gitlab-ci-semrel@4
     inputs:
       commit-spec: conventionalcommits
 
-  - component: $CI_SERVER_FQDN/to-be-continuous/docker/gitlab-ci-docker@8.4
+  - component: $CI_SERVER_FQDN/to-be-continuous/python/gitlab-ci-python@9
     inputs:
-      trivy-disabled: true
-      release-extra-tags: "latest \\g<major>.\\g<minor>\\g<build>"
+      image: python:3.13-alpine
+      dep-groups: test
+      pytest-enabled: true
+      pytest-args: "--ignore=tests/test_video_recording.py" # test_video_recording.py is covered by test-docker-smoke below
+      ruff-enabled: true
+      ruff-args: "--fix"
+      mypy-enabled: true
+      pyright-enabled: true
+      publish-enabled: true
+
+py-publish:
+  variables:
+    PYTHON_REPOSITORY_USERNAME: pypi-oidc
+    PYTHON_REPOSITORY_URL: "https://upload.pypi.org/legacy/"
+  before_script:
+    - !reference [.python-base, before_script]
+    - apk add --no-cache git # versioningit extension
+  id_tokens:
+    PYPI_ID_TOKEN:
+      aud: pypi
 
 semantic-release:
   allow_failure: true
@@ -16,10 +49,16 @@ test-docker-smoke:
   image: docker:29-cli
   services:
     - docker:29-dind
-  variables:
-    SMOKE_IMAGE: $CI_REGISTRY_IMAGE/snapshot:$CI_COMMIT_REF_SLUG
   before_script:
-    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
+    # ffmpeg (for its ffprobe binary) runs on this job's own host, not inside
+    # docker-libreoffice-impress — test_video_recording.py decodes the
+    # recorded .mp4 it copies out (via ffprobe/ffmpeg) to verify duration and
+    # final-frame content.
+    - apk add --no-cache python3 uv ffmpeg
+    - docker pull registry.gitlab.com/riphixel/docker-libreoffice-impress:latest
   script:
-    - docker run --rm --entrypoint soffice $SMOKE_IMAGE --version
-    - docker run --rm --entrypoint python3 $SMOKE_IMAGE -c "import uno; print('uno import OK')"
+    # UV_NO_SYNC=1 (top-level variables:) makes `uv run` skip auto-installing --
+    # that's meant for the python-component-managed jobs, which handle their own
+    # install step; this job needs an explicit sync first.
+    - uv sync --group test
+    - uv run pytest tests/ -v
