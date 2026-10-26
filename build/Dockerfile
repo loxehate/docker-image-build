@@ -22,7 +22,8 @@ RUN \
         libreoffice-impress \
         libreoffice-writer \
         imagemagick \
-        ffmpeg
+        ffmpeg \
+        xdotool
 
 # Fonts — as broad a set as Alpine packages, to minimize substitution when
 # rendering decks authored on real PowerPoint.

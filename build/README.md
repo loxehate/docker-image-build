@@ -80,8 +80,8 @@ reconstruct after the fact.
   driver of slide progression — nothing races a slide's own timer into an
   overshoot.
 - **Recording starts only after the full-screen slideshow is ready.** The
-  controller is paused immediately, the separate document-editor window is
-  hidden, and the slideshow is activated and checked for running, active,
-  full-screen first-slide state before `ffmpeg` starts. A one-second
-  pre-record paint settle prevents the editor or an incomplete window switch
-  from leaking into the recording.
+  separate document-editor window is hidden, then `xdotool` confirms that a
+  different active X11 window covers the complete virtual display. UNO must
+  also report a running, active, full-screen first slide before `ffmpeg`
+  starts. The controller is never paused during startup, preserving automatic
+  and chart animations.

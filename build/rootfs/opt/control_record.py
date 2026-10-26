@@ -13,17 +13,18 @@ import uno  # type: ignore[import-not-found]  # provided by the container's syst
 from com.sun.star.beans import PropertyValue  # type: ignore[import-not-found]
 
 DISPLAY = ":0"
-DISPLAY_SIZE = f"{os.environ.get('DISPLAY_WIDTH', '1920')}x{os.environ.get('DISPLAY_HEIGHT', '1080')}"  # keeps ffmpeg in sync with Xvfb
+DISPLAY_WIDTH = int(os.environ.get("DISPLAY_WIDTH", "1920"))
+DISPLAY_HEIGHT = int(os.environ.get("DISPLAY_HEIGHT", "1080"))
+DISPLAY_SIZE = f"{DISPLAY_WIDTH}x{DISPLAY_HEIGHT}"  # keeps ffmpeg in sync with Xvfb
 FRAMERATE = "30"
 UNO_HOST = "localhost"
 UNO_PORT = 2002
 CONNECT_TIMEOUT_S = 30
 CONNECT_RETRY_INTERVAL_S = 0.5
 SLIDESHOW_READY_TIMEOUT_S = 15
-SLIDESHOW_READY_RETRY_INTERVAL_S = 0.05
-SLIDESHOW_RENDER_SETTLE_S = float(os.environ.get("SLIDESHOW_RENDER_SETTLE_S", "1.0"))
+SLIDESHOW_READY_RETRY_INTERVAL_S = 0.01
 
-LEAD_IN_S = float(os.environ.get("LEAD_IN_S", "0.3"))  # full-screen first slide held while ffmpeg starts, before animations resume
+LEAD_IN_S = float(os.environ.get("LEAD_IN_S", "0.3"))  # lets ffmpeg begin capturing before the first synthetic click
 
 ADVANCE_STEP_TIMEOUT_S = 2.0  # ceiling per gotoNextSlide() call for the index to actually change
 ADVANCE_TOTAL_TIMEOUT_S = 5.0  # ceiling for the whole per-slide advance
@@ -89,26 +90,70 @@ def capture_frame(output_path: str) -> None:
     subprocess.run(["import", "-display", DISPLAY, "-window", "root", output_path], check=True)
 
 
-def wait_for_slideshow_ready(controller, expected_slide_index: int) -> None:
-    """Wait until the full-screen slideshow, rather than the Impress editor, owns the presentation UI."""
+def get_active_x11_window_id() -> str | None:
+    """Return the active X11 window ID, or None while no client window owns focus."""
+    result = subprocess.run(
+        ["xdotool", "getactivewindow"],
+        capture_output=True,
+        text=True,
+        check=False,
+        env={**os.environ, "DISPLAY": DISPLAY},
+    )
+    window_id = result.stdout.strip()
+    return window_id if result.returncode == 0 and window_id else None
+
+
+def get_x11_window_geometry(window_id: str) -> tuple[int, int, int, int] | None:
+    """Return an X11 window's x, y, width, and height from xdotool."""
+    result = subprocess.run(
+        ["xdotool", "getwindowgeometry", "--shell", window_id],
+        capture_output=True,
+        text=True,
+        check=False,
+        env={**os.environ, "DISPLAY": DISPLAY},
+    )
+    if result.returncode != 0:
+        return None
+    values = dict(line.split("=", 1) for line in result.stdout.splitlines() if "=" in line)
+    try:
+        return int(values["X"]), int(values["Y"]), int(values["WIDTH"]), int(values["HEIGHT"])
+    except (KeyError, ValueError):
+        return None
+
+
+def wait_for_slideshow_ready(controller, expected_slide_index: int, editor_window_id: str | None) -> str:
+    """Wait until a distinct full-display X11 slideshow window owns focus."""
     deadline = time.monotonic() + SLIDESHOW_READY_TIMEOUT_S
     last_state = None
     while time.monotonic() < deadline:
+        active_window_id = get_active_x11_window_id()
+        geometry = get_x11_window_geometry(active_window_id) if active_window_id is not None else None
+        fills_display = (
+            geometry is not None
+            and geometry[0] <= 0
+            and geometry[1] <= 0
+            and geometry[2] >= DISPLAY_WIDTH
+            and geometry[3] >= DISPLAY_HEIGHT
+        )
+        distinct_from_editor = active_window_id is not None and (editor_window_id is None or active_window_id != editor_window_id)
         last_state = {
             "running": controller.isRunning(),
             "active": controller.isActive(),
             "fullscreen": controller.isFullScreen(),
-            "paused": controller.isPaused(),
             "slide_index": controller.getCurrentSlideIndex(),
+            "editor_x11_window": editor_window_id,
+            "active_x11_window": active_window_id,
+            "active_x11_geometry": geometry,
         }
         if (
             last_state["running"]
             and last_state["active"]
             and last_state["fullscreen"]
-            and last_state["paused"]
             and last_state["slide_index"] == expected_slide_index
+            and distinct_from_editor
+            and fills_display
         ):
-            return
+            return active_window_id
         controller.activate()
         time.sleep(SLIDESHOW_READY_RETRY_INTERVAL_S)
     raise RuntimeError(f"slideshow window did not become ready within {SLIDESHOW_READY_TIMEOUT_S}s; last state: {last_state}")
@@ -162,6 +207,7 @@ def main() -> int:
     doc = desktop.loadComponentFromURL(file_url, "_blank", 0, load_props)
     _ = result["steps"].append("loaded")
     editor_window = doc.getCurrentController().getFrame().getContainerWindow()
+    editor_x11_window_id = get_active_x11_window_id()
 
     # Disable per-slide auto-advance BEFORE starting the show, so manual driving is the sole advance
     # mechanism and nothing races an advTm timer into overshoot — see IMPRESS_PROTOCOL.md §6.
@@ -187,12 +233,11 @@ def main() -> int:
             if presentation.isRunning():
                 controller = presentation.getController()
                 if controller is not None:
-                    controller.pause()
                     break
             if time.monotonic() > deadline:
                 raise RuntimeError("presentation never produced a running slideshow controller")
             time.sleep(SLIDESHOW_READY_RETRY_INTERVAL_S)
-        _ = result["steps"].append("presentation running and paused")
+        _ = result["steps"].append("presentation running")
 
         # The slideshow has its own window. Remove the document editor from X11 before
         # recording so delayed focus/mapping cannot leak its toolbars into the video.
@@ -202,15 +247,12 @@ def main() -> int:
         controller.AlwaysOnTop = True
         controller.activate()
         expected_slide_index = plan[0]["index"] if plan else 0
-        wait_for_slideshow_ready(controller, expected_slide_index)
-        time.sleep(SLIDESHOW_RENDER_SETTLE_S)
-        _ = result["steps"].append(f"fullscreen slideshow ready on slide {expected_slide_index}")
+        slideshow_x11_window_id = wait_for_slideshow_ready(controller, expected_slide_index, editor_x11_window_id)
+        _ = result["steps"].append(f"fullscreen X11 slideshow window {slideshow_x11_window_id} ready on slide {expected_slide_index}")
 
         recording = start_recording(args.output)
         _ = result["steps"].append("recording started")
         time.sleep(LEAD_IN_S)
-        controller.resume()
-        _ = result["steps"].append("slideshow resumed")
 
         total_frame_count = 0
         for pos, entry in enumerate(plan):
