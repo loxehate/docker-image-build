@@ -31,8 +31,10 @@ sequenceDiagram
 
     Container->>Impress: connect (UNO socket), loadComponentFromURL
     Container->>Impress: disable auto-advance (Change=0 every page)
-    Container->>Impress: presentation.start()
+    Container->>Impress: configure full-screen/always-on-top, presentation.start()
+    Container->>Impress: pause(), activate(), verify full-screen first slide
     Container->>Container: start ffmpeg -f x11grab
+    Container->>Impress: resume()
     loop per slide in plan
         loop per click_gaps_ms entry
             Container->>Impress: gotoNextEffect()
@@ -160,12 +162,16 @@ subprocess it didn't get to wait on.
    `Change` property is set to `0` (advance-on-click; `1` = advance
    automatically after the page's own `advTm` timer). This is the single
    most important step in the whole protocol — see §5.
-4. **Start the presentation.** `doc.getPresentation().start()`, then poll
-   `presentation.isRunning()` (15s timeout) before proceeding.
-5. **Get the controller.** `presentation.getController()` returns an
-   `XSlideShowController` — every subsequent navigation call
-   (`gotoNextEffect()`, `gotoNextSlide()`, `getCurrentSlideIndex()`,
-   `pause()`, `deactivate()`, …) goes through this object.
+4. **Start the presentation in full-screen/always-on-top mode.** Set
+   `IsFullScreen=True`, `IsAlwaysOnTop=True`, and `StartWithNavigator=False`,
+   then call `start()`. As soon as a running controller is available, pause
+   it so first-slide effects cannot run before recording starts.
+5. **Activate and verify the slideshow UI.** Set the controller's
+   `AlwaysOnTop=True`, call `activate()`, and wait until it reports all of:
+   running, active, full-screen, paused, and positioned on the plan's first
+   slide. `presentation.isRunning()` alone is insufficient: it can become
+   true while the visible X11 window is still the Impress editor. Hold the
+   verified full-screen first slide briefly so its first paint completes.
 6. **Start recording.** `ffmpeg -f x11grab -video_size <DISPLAY_SIZE>
    -framerate 15 -draw_mouse 0 -i :0 -pix_fmt yuv420p -movflags +faststart
    <output>`, launched as a subprocess with a stdin pipe (needed for clean
@@ -173,8 +179,9 @@ subprocess it didn't get to wait on.
    the real X11 cursor into every frame, and since nothing ever moves it
    during UNO-driven playback it just sits as a static artifact wherever it
    was last left.
-7. **Lead-in.** A short fixed sleep (`LEAD_IN_S`, 0.3s) before driving the
-   first click, so ffmpeg has actually started capturing frames.
+7. **Lead-in and resume.** Hold the already-rendered, paused full-screen
+   first slide for a short fixed interval (`LEAD_IN_S`, 0.3s), so ffmpeg has
+   started capturing valid slide frames, then call `controller.resume()`.
 8. **Drive the plan**, per slide, in order (see §5 for the plan format and
    §7 for the exact per-slide loop) — capturing one live screenshot per
    settled click along the way (`import -window root`, §10), not just

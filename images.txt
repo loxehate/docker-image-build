@@ -1,1 +1,1 @@
-slides-to-images:v1
+slides2images-libreoffice-impress:local

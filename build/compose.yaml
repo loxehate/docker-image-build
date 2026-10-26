@@ -1,4 +1,12 @@
 services:
+  impress-image:
+    build:
+      context: ./docker-libreoffice-impress-main
+      dockerfile: Dockerfile
+    image: slides2images-libreoffice-impress:local
+    entrypoint: ["/bin/true"]
+    restart: "no"
+
   converter:
     build:
       context: .
@@ -8,6 +16,7 @@ services:
     restart: "no"
     environment:
       DOCKER_HOST: unix:///var/run/docker.sock
+      SLIDES2IMAGES_IMPRESS_IMAGE: slides2images-libreoffice-impress:local
     volumes:
       - type: bind
         source: /var/run/docker.sock

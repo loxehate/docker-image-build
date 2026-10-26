@@ -5,6 +5,7 @@ docker-libreoffice-impress to record it and capture a live screenshot per settle
 from __future__ import annotations
 
 import json
+import os
 import subprocess  # nosemgrep: cache.semgrep.gitlab.bandit.B404 -- every call site below uses list-form args, no shell=True, no untrusted string interpolation
 import tempfile
 import time
@@ -15,7 +16,7 @@ from typing import Any
 
 from .animation_timeline import CLICK_DELAY_MS, build_recording_plan
 
-IMAGE = "registry.gitlab.com/riphixel/docker-libreoffice-impress:latest"
+IMAGE = os.environ.get("SLIDES2IMAGES_IMPRESS_IMAGE", "registry.gitlab.com/riphixel/docker-libreoffice-impress:latest")
 CONTAINER_NAME_PREFIX = "slides2images"
 CONTAINER_CONTROL_SCRIPT_PATH = "/opt/control_record.py"  # baked into the image, not copied in per job
 CONTAINER_READY_TIMEOUT_S = 60

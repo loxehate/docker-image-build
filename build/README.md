@@ -33,6 +33,8 @@ For local development from a source checkout instead: `pip install -e .`
 
 `convert()` additionally needs a reachable Docker daemon, with the image
 pulled: `docker pull registry.gitlab.com/riphixel/docker-libreoffice-impress:latest`.
+Set `SLIDES2IMAGES_IMPRESS_IMAGE` to use a locally built or pinned variant
+instead of the default image.
 
 ## Usage
 
