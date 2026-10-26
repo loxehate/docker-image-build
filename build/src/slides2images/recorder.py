@@ -20,6 +20,7 @@ IMAGE = os.environ.get("SLIDES2IMAGES_IMPRESS_IMAGE", "registry.gitlab.com/riphi
 CONTAINER_NAME_PREFIX = "slides2images"
 CONTAINER_CONTROL_SCRIPT_PATH = "/opt/control_record.py"  # baked into the image, not copied in per job
 CONTAINER_READY_TIMEOUT_S = 60
+CONTAINER_SHM_SIZE = os.environ.get("SLIDES2IMAGES_SHM_SIZE", "1g")
 
 RESOLUTIONS: dict[str, tuple[int, int]] = {  # "hd" is Full HD (1080p), distinct from the separate "720p" tier
     "vga": (640, 480),
@@ -118,6 +119,25 @@ def _wait_for_container_ready(container_name: str) -> None:
     raise RecordingError(f"container {container_name} did not become ready within {CONTAINER_READY_TIMEOUT_S}s")
 
 
+def _container_diagnostics(container_name: str) -> str:
+    """Return compact state and log diagnostics before a failed job container is removed."""
+    state = subprocess.run(
+        ["docker", "inspect", "-f", "{{json .State}}", container_name],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    logs = subprocess.run(
+        ["docker", "logs", "--tail", "100", container_name],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    state_text = state.stdout.strip() or state.stderr.strip() or "unavailable"
+    logs_text = (logs.stdout + logs.stderr).strip() or "unavailable"
+    return f"container state: {state_text}\ncontainer logs:\n{logs_text}"
+
+
 def record_video(
     pptx_path: Path,
     plan: list[dict[str, Any]],
@@ -141,6 +161,8 @@ def record_video(
             "-d",
             "--name",
             container_name,
+            "--shm-size",
+            CONTAINER_SHM_SIZE,
             "-e",
             f"DISPLAY_WIDTH={width}",
             "-e",
@@ -184,7 +206,8 @@ def record_video(
             check=False,
         )
         if result.returncode != 0:
-            raise RecordingError(f"control_record.py failed (exit {result.returncode}): {result.stdout}\n{result.stderr}")
+            diagnostics = _container_diagnostics(container_name)
+            raise RecordingError(f"control_record.py failed (exit {result.returncode}): {result.stdout}\n{result.stderr}\n{diagnostics}")
 
         output_path.parent.mkdir(parents=True, exist_ok=True)
         subprocess.run(

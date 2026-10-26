@@ -35,6 +35,8 @@ For local development from a source checkout instead: `pip install -e .`
 pulled: `docker pull registry.gitlab.com/riphixel/docker-libreoffice-impress:latest`.
 Set `SLIDES2IMAGES_IMPRESS_IMAGE` to use a locally built or pinned variant
 instead of the default image.
+Recording containers receive a 1 GiB `/dev/shm` allocation by default;
+override it with `SLIDES2IMAGES_SHM_SIZE` when necessary.
 
 ## Usage
 

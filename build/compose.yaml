@@ -21,6 +21,7 @@ services:
     environment:
       DOCKER_HOST: unix:///var/run/docker.sock
       SLIDES2IMAGES_IMPRESS_IMAGE: slides2images-libreoffice-impress:local
+      SLIDES2IMAGES_SHM_SIZE: ${SLIDES2IMAGES_SHM_SIZE:-1g}
     volumes:
       - type: bind
         source: /var/run/docker.sock
